@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo - Chat Widget (Build)</title>
+    <link rel="stylesheet" href="./dist/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        p {
+            line-height: 1.6;
+            color: #666;
+        }
+        .config-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        button {
+            background: #3B82F6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2563EB;
+        }
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .config-item {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .config-item h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .config-item p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .debug-info {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Exemplo - Chat Widget</h1>
+        <p>Esta é uma página de exemplo para testar o widget de chat com diferentes configurações.</p>
+        
+        <div class="debug-info" id="debug-info">
+            <strong>Debug Info:</strong><br>
+            Aguardando carregamento...
+        </div>
+        
+        <div class="config-section">
+            <h3>Configurações do Widget</h3>
+            <div class="config-grid">
+                <div class="config-item">
+                    <h4>Widget Padrão</h4>
+                    <p>Configuração básica com posição inferior direita</p>
+                    <button onclick="initWidgetDefault()">Inicializar</button>
+                </div>
+                <div class="config-item">
+                    <h4>Widget Esquerda</h4>
+                    <p>Posicionado no canto inferior esquerdo</p>
+                    <button onclick="initWidgetLeft()">Inicializar</button>
+                </div>
+                <div class="config-item">
+                    <h4>Widget Personalizado</h4>
+                    <p>Cor roxa e mensagem personalizada</p>
+                    <button onclick="initWidgetCustom()">Inicializar</button>
+                </div>
+                <div class="config-item">
+                    <h4>Widget Dark</h4>
+                    <p>Tema escuro com avatar</p>
+                    <button onclick="initWidgetDark()">Inicializar</button>
+                </div>
+                <div class="config-item">
+                    <h4>Widget com Timestamp</h4>
+                    <p>Mostra horário nas mensagens</p>
+                    <button onclick="initWidgetTimestamp()">Inicializar</button>
+                </div>
+                <div class="config-item">
+                    <h4>Widget Auto-Open</h4>
+                    <p>Abre automaticamente</p>
+                    <button onclick="initWidgetAutoOpen()">Inicializar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <h3>Gerenciamento</h3>
+            <button onclick="destroyCurrentWidget()">Destruir Widget Atual</button>
+            <button onclick="destroyAllWidgets()">Destruir Todos</button>
+        </div>
+
+        <p>Clique em um dos botões acima para testar diferentes configurações do widget.</p>
+    </div>
+
+    <!-- Carrega o widget buildado -->
+    <script>
+        console.log('🔍 Iniciando debug do widget...');
+        
+        function updateDebugInfo(message) {
+            const debugEl = document.getElementById('debug-info');
+            if (debugEl) {
+                debugEl.innerHTML = '<strong>Debug Info:</strong><br>' + message;
+            }
+            console.log('📝 Debug:', message);
+        }
+        
+        updateDebugInfo('Carregando script do widget...');
+    </script>
+    
+    <script src="./dist/chat-widget.umd.cjs" onload="updateDebugInfo('Script carregado com sucesso!')" onerror="updateDebugInfo('ERRO: Falha ao carregar script!')"></script>
+    
+    <script>
+        let currentWidget = null;
+
+        function initWidgetDefault() {
+            updateDebugInfo('Inicializando widget padrão...');
+            try {
+                if (typeof ChatWidget === 'undefined') {
+                    updateDebugInfo('ERRO: ChatWidget não está definido!');
+                    return;
+                }
+                currentWidget = ChatWidget.initWidget({
+                    id: 'default',
+                    title: "Fale conosco",
+                    position: "bottom-right",
+                    primaryColor: "#3B82F6"
+                });
+                updateDebugInfo('Widget padrão inicializado com sucesso!');
+            } catch (error) {
+                updateDebugInfo('ERRO ao inicializar widget: ' + error.message);
+                console.error('Erro:', error);
+            }
+        }
+
+        function initWidgetLeft() {
+            updateDebugInfo('Inicializando widget esquerda...');
+            try {
+                currentWidget = ChatWidget.initWidget({
+                    id: 'left',
+                    title: "Suporte",
+                    position: "bottom-left",
+                    primaryColor: "#10B981"
+                });
+                updateDebugInfo('Widget esquerda inicializado!');
+            } catch (error) {
+                updateDebugInfo('ERRO: ' + error.message);
+            }
+        }
+
+        function initWidgetCustom() {
+            updateDebugInfo('Inicializando widget personalizado...');
+            try {
+                currentWidget = ChatWidget.initWidget({
+                    id: 'custom',
+                    title: "Contato",
+                    position: "bottom-right",
+                    primaryColor: "#8B5CF6",
+                    welcomeMessage: "Olá! Como posso ajudá-lo hoje?",
+                    successMessage: "Perfeito! Entraremos em contato em breve."
+                });
+                updateDebugInfo('Widget personalizado inicializado!');
+            } catch (error) {
+                updateDebugInfo('ERRO: ' + error.message);
+            }
+        }
+
+        function initWidgetDark() {
+            updateDebugInfo('Inicializando widget dark...');
+            try {
+                currentWidget = ChatWidget.initWidget({
+                    id: 'dark',
+                    title: "Suporte Técnico",
+                    position: "bottom-right",
+                    primaryColor: "#1F2937",
+                    theme: "dark",
+                    showAvatar: true
+                });
+                updateDebugInfo('Widget dark inicializado!');
+            } catch (error) {
+                updateDebugInfo('ERRO: ' + error.message);
+            }
+        }
+
+        function initWidgetTimestamp() {
+            updateDebugInfo('Inicializando widget com timestamp...');
+            try {
+                currentWidget = ChatWidget.initWidget({
+                    id: 'timestamp',
+                    title: "Chat com Horário",
+                    position: "bottom-right",
+                    primaryColor: "#059669",
+                    showTimestamp: true
+                });
+                updateDebugInfo('Widget com timestamp inicializado!');
+            } catch (error) {
+                updateDebugInfo('ERRO: ' + error.message);
+            }
+        }
+
+        function initWidgetAutoOpen() {
+            updateDebugInfo('Inicializando widget auto-open...');
+            try {
+                currentWidget = ChatWidget.initWidget({
+                    id: 'auto-open',
+                    title: "Bem-vindo!",
+                    position: "bottom-right",
+                    primaryColor: "#DC2626",
+                    autoOpen: true
+                });
+                updateDebugInfo('Widget auto-open inicializado!');
+            } catch (error) {
+                updateDebugInfo('ERRO: ' + error.message);
+            }
+        }
+
+        function destroyCurrentWidget() {
+            updateDebugInfo('Destruindo widget atual...');
+            if (currentWidget) {
+                currentWidget.destroy();
+                currentWidget = null;
+                updateDebugInfo('Widget destruído!');
+            } else {
+                updateDebugInfo('Nenhum widget para destruir');
+            }
+        }
+
+        function destroyAllWidgets() {
+            updateDebugInfo('Destruindo todos os widgets...');
+            try {
+                ChatWidget.destroyAllWidgets();
+                currentWidget = null;
+                updateDebugInfo('Todos os widgets destruídos!');
+            } catch (error) {
+                updateDebugInfo('ERRO: ' + error.message);
+            }
+        }
+
+        // Aguarda o carregamento da página e inicializa o widget padrão
+        window.addEventListener('load', function() {
+            updateDebugInfo('Página carregada, aguardando 500ms...');
+            setTimeout(() => {
+                updateDebugInfo('Verificando se ChatWidget está disponível...');
+                if (typeof ChatWidget !== 'undefined') {
+                    updateDebugInfo('ChatWidget disponível, inicializando...');
+                    initWidgetDefault();
+                } else {
+                    updateDebugInfo('ERRO: ChatWidget não encontrado!');
+                }
+            }, 500);
+        });
+        
+        // Debug adicional
+        window.addEventListener('error', function(e) {
+            updateDebugInfo('ERRO JS: ' + e.message);
+        });
+    </script>
+</body>
+</html> 
