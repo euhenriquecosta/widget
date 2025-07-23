@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
+import { MessageCircle } from 'lucide-react'; // <== novo ícone
 
 interface WidgetConfig {
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
-  title?: string;
   primaryColor?: string;
   theme?: 'light' | 'dark';
   width?: number | string;
@@ -14,7 +14,7 @@ interface WidgetProps {
 }
 
 export function Widget({ config }: WidgetProps) {
-  const [isOpen] = useState(true); // já inicia aberto
+  const [isOpen, setIsOpen] = useState(true);
   const [isMinimized, setIsMinimized] = useState(false);
 
   const position = config.position || 'bottom-right';
@@ -44,6 +44,9 @@ export function Widget({ config }: WidgetProps) {
       if (event.data?.type === 'WIDGET_MINIMIZE') {
         setIsMinimized(event.data.minimized);
       }
+      if (event.data?.type === 'WIDGET_CLOSE') {
+        setIsOpen(false);
+      }
     }
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
@@ -52,35 +55,86 @@ export function Widget({ config }: WidgetProps) {
   const parseSize = (size: number | string) =>
     typeof size === 'number' ? `${size}px` : size;
 
+  const handleReopen = () => {
+    setIsOpen(true);
+    setIsMinimized(false);
+  };
+
   return (
-    <div className="fixed z-50" aria-label="Widget de chat">
+    <div className="fixed z-50">
+      {/* Se NÃO estiver aberto, mostra apenas a bolinha */}
+      {!isOpen && (
+        <button
+          onClick={handleReopen}
+          className={`fixed ${positionClasses[position]} flex items-center justify-center rounded-full shadow-lg`}
+          style={{
+            width: '64px',
+            height: '64px',
+            backgroundColor: config.primaryColor || '#4F46E5',
+            color: '#fff',
+            border: 'none',
+            cursor: 'pointer',
+            zIndex: 60,
+          }}
+          aria-label="Abrir chat"
+        >
+          <MessageCircle size={28} />
+        </button>
+      )}
+
+      {/* Se estiver aberto */}
       {isOpen && (
         <div
           id="chat-iframe-container"
-          className={`fixed ${positionClasses[position]} shadow-xl rounded-lg overflow-hidden transition-all duration-300 ease-in-out`}
+          className={`fixed ${positionClasses[position]} shadow-xl transition-all duration-300 ease-in-out`}
           style={{
-            width: isMinimized ? '320px' : parseSize(width),
-            height: isMinimized ? '48px' : parseSize(height),
-            backgroundColor: 'transparent',
-            border: 'none',
+            width: isMinimized ? '64px' : parseSize(width),
+            height: isMinimized ? '64px' : parseSize(height),
+            borderRadius: isMinimized ? '50%' : '0.5rem',
+            overflow: 'hidden',
             zIndex: 55,
+            backgroundColor: isMinimized
+              ? config.primaryColor || '#4F46E5'
+              : 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
           role="dialog"
           aria-modal="true"
         >
-          <iframe
-            ref={iframeRef}
-            src={iframeUrl}
-            title="Chat"
-            className="w-full h-full border-0"
-            style={{
-              backgroundColor: 'transparent',
-              colorScheme: 'auto',
-            }}
-            allow="microphone; camera"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-            loading="lazy"
-          />
+          {isMinimized ? (
+            <button
+              onClick={() => {
+                setIsMinimized(false);
+                setIsOpen(true);
+              }}
+              style={{
+                width: '100%',
+                height: '100%',
+                border: 'none',
+                background: 'transparent',
+                color: '#fff',
+                cursor: 'pointer',
+              }}
+            >
+              <MessageCircle size={28} />
+            </button>
+          ) : (
+            <iframe
+              ref={iframeRef}
+              src={iframeUrl}
+              title="Chat"
+              className="w-full h-full border-0"
+              style={{
+                backgroundColor: 'transparent',
+                colorScheme: 'auto',
+              }}
+              allow="microphone; camera"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              loading="lazy"
+            />
+          )}
         </div>
       )}
     </div>
