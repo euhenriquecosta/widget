@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { MessageCircle } from 'lucide-react'; // <== novo ícone
+import { MessageCircle, Minimize2, Maximize2, X } from 'lucide-react';
 
 interface WidgetConfig {
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
@@ -14,7 +14,7 @@ interface WidgetProps {
 }
 
 export function Widget({ config }: WidgetProps) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
 
   const position = config.position || 'bottom-right';
@@ -39,15 +39,17 @@ export function Widget({ config }: WidgetProps) {
     }
   }, []);
 
+  // Escuta mensagens do iframe
   useEffect(() => {
-    function handleMessage(event: MessageEvent) {
-      if (event.data?.type === 'WIDGET_MINIMIZE') {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === 'WIDGET_MINIMIZE') {
         setIsMinimized(event.data.minimized);
-      }
-      if (event.data?.type === 'WIDGET_CLOSE') {
+      } else if (event.data.type === 'WIDGET_CLOSE') {
         setIsOpen(false);
+        setIsMinimized(false);
       }
-    }
+    };
+
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, []);
@@ -55,18 +57,31 @@ export function Widget({ config }: WidgetProps) {
   const parseSize = (size: number | string) =>
     typeof size === 'number' ? `${size}px` : size;
 
-  const handleReopen = () => {
+  const handleOpen = () => {
     setIsOpen(true);
     setIsMinimized(false);
   };
 
-  return (
-    <div className="fixed z-50">
-      {/* Se NÃO estiver aberto, mostra apenas a bolinha */}
-      {!isOpen && (
+  const handleClose = () => {
+    setIsOpen(false);
+    setIsMinimized(false);
+  };
+
+  const handleMinimize = () => {
+    setIsMinimized(!isMinimized);
+  };
+
+  const handleMaximize = () => {
+    setIsMinimized(false);
+  };
+
+
+  if (!isOpen) {
+    return (
+      <div className="fixed z-50">
         <button
-          onClick={handleReopen}
-          className={`fixed ${positionClasses[position]} flex items-center justify-center rounded-full shadow-lg`}
+          onClick={handleOpen}
+          className={`fixed ${positionClasses[position]} flex items-center justify-center rounded-full shadow-lg hover:scale-110 transition-transform duration-200`}
           style={{
             width: '64px',
             height: '64px',
@@ -80,63 +95,114 @@ export function Widget({ config }: WidgetProps) {
         >
           <MessageCircle size={28} />
         </button>
-      )}
+      </div>
+    );
+  }
 
-      {/* Se estiver aberto */}
-      {isOpen && (
-        <div
-          id="chat-iframe-container"
-          className={`fixed ${positionClasses[position]} shadow-xl transition-all duration-300 ease-in-out`}
+
+  if (isMinimized) {
+    return (
+      <div className="fixed z-50">
+        <button
+          onClick={handleMaximize}
+          className={`fixed ${positionClasses[position]} flex items-center justify-center rounded-full shadow-lg hover:scale-110 transition-all duration-200`}
           style={{
-            width: isMinimized ? '64px' : parseSize(width),
-            height: isMinimized ? '64px' : parseSize(height),
-            borderRadius: isMinimized ? '50%' : '0.5rem',
-            overflow: 'hidden',
-            zIndex: 55,
-            backgroundColor: isMinimized
-              ? config.primaryColor || '#4F46E5'
-              : 'transparent',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            width: '64px',
+            height: '64px',
+            backgroundColor: config.primaryColor || '#4F46E5',
+            color: '#fff',
+            border: 'none',
+            cursor: 'pointer',
+            zIndex: 60,
           }}
-          role="dialog"
-          aria-modal="true"
+          aria-label="Maximizar chat"
         >
-          {isMinimized ? (
-            <button
-              onClick={() => {
-                setIsMinimized(false);
-                setIsOpen(true);
-              }}
-              style={{
-                width: '100%',
-                height: '100%',
-                border: 'none',
-                background: 'transparent',
-                color: '#fff',
-                cursor: 'pointer',
-              }}
-            >
-              <MessageCircle size={28} />
-            </button>
-          ) : (
-            <iframe
-              ref={iframeRef}
-              src={iframeUrl}
-              title="Chat"
-              className="w-full h-full border-0"
-              style={{
-                backgroundColor: 'transparent',
-                colorScheme: 'auto',
-              }}
-              allow="microphone; camera"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-              loading="lazy"
+          <MessageCircle size={28} />
+        </button>
+      </div>
+    );
+  }
+
+
+  return (
+    <div className="fixed z-50">
+      <div
+        className={`fixed ${positionClasses[position]} shadow-xl transition-all duration-300 ease-in-out flex flex-col`}
+        style={{
+          width: parseSize(width),
+          height: parseSize(height),
+          borderRadius: '0.75rem',
+          overflow: 'hidden',
+          zIndex: 55,
+          backgroundColor: theme === 'dark' ? '#1a1a1a' : '#ffffff',
+        }}
+        role="dialog"
+        aria-modal="true"
+      >
+        <div
+          className="flex items-center justify-between px-4 py-4 flex-shrink-0"
+          style={{
+            backgroundColor: theme === 'dark' ? '#2d2d2d' : '#f8f9fa',
+            borderBottom: theme === 'dark' ? '1px solid #404040' : '1px solid #e9ecef',
+            color: theme === 'dark' ? '#ffffff' : '#1a1a1a',
+            minHeight: '64px',
+          }}
+        >
+          <div className="flex items-center gap-2">
+            <div
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: config.primaryColor || '#4F46E5' }}
             />
-          )}
+            <span className="font-semibold text-sm">Leadnator</span>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleMinimize}
+              className="p-2"
+              style={{ 
+                color: '#888888',
+                backgroundColor: 'transparent',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+              aria-label="Minimizar"
+            >
+              <Minimize2 size={16} />
+            </button>
+            
+            <button
+              onClick={handleClose}
+              className="p-2"
+              style={{ 
+                color: '#888888',
+                backgroundColor: 'transparent',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+              aria-label="Fechar"
+            >
+              <X size={16} />
+            </button>
+          </div>
         </div>
-      )}
+
+        <div className="flex-1 overflow-hidden">
+          <iframe
+            ref={iframeRef}
+            src={iframeUrl}
+            title="Chat"
+            className="w-full h-full border-0 block"
+            style={{
+              backgroundColor: 'transparent',
+              display: 'block',
+            }}
+            allow="microphone; camera"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+            loading="lazy"
+          />
+        </div>
+      </div>
     </div>
   );
 }
