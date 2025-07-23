@@ -1,78 +1,142 @@
-import { useState } from 'preact/hooks';
-import type { WidgetConfig } from '../utils/types';
+import { useState, useEffect, useRef } from 'preact/hooks';
+import { MessageCircle } from 'lucide-react'; // <== novo ícone
+
+interface WidgetConfig {
+  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
+  primaryColor?: string;
+  theme?: 'light' | 'dark';
+  width?: number | string;
+  height?: number | string;
+}
 
 interface WidgetProps {
   config: WidgetConfig;
 }
 
 export function Widget({ config }: WidgetProps) {
-  // Teste básico com apenas um estado
-  const [isOpen, setIsOpen] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const [isOpen, setIsOpen] = useState(true);
+  const [isMinimized, setIsMinimized] = useState(false);
 
-  // Configurações básicas
   const position = config.position || 'bottom-right';
-  const title = config.title || 'Fale conosco';
-  const primaryColor = config.primaryColor || '#3B82F6';
+  const theme = config.theme || 'dark';
+  const width = config.width || 384;
+  const height = config.height || 600;
 
-  console.log('Widget renderizando, isOpen:', isOpen);
+  const iframeUrl = `http://localhost:5173/widgets?theme=${theme}`;
 
-  const positionClasses = {
+  const positionClasses: Record<string, string> = {
     'bottom-right': 'bottom-4 right-4',
     'bottom-left': 'bottom-4 left-4',
     'top-right': 'top-4 right-4',
-    'top-left': 'top-4 left-4'
+    'top-left': 'top-4 left-4',
+  };
+
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    if (iframeRef.current) {
+      iframeRef.current.setAttribute('allowtransparency', 'true');
+    }
+  }, []);
+
+  useEffect(() => {
+    function handleMessage(event: MessageEvent) {
+      if (event.data?.type === 'WIDGET_MINIMIZE') {
+        setIsMinimized(event.data.minimized);
+      }
+      if (event.data?.type === 'WIDGET_CLOSE') {
+        setIsOpen(false);
+      }
+    }
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  const parseSize = (size: number | string) =>
+    typeof size === 'number' ? `${size}px` : size;
+
+  const handleReopen = () => {
+    setIsOpen(true);
+    setIsMinimized(false);
   };
 
   return (
     <div className="fixed z-50">
-      {/* Botão flutuante */}
-      <button
-        onClick={() => {
-          console.log('Botão clicado, isOpen atual:', isOpen);
-          setIsOpen(!isOpen);
-        }}
-        className={`fixed ${positionClasses[position]} w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white transition-all duration-200 hover:scale-110`}
-        style={{ backgroundColor: primaryColor }}
-      >
-        {isOpen ? (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        ) : (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-        )}
-      </button>
+      {/* Se NÃO estiver aberto, mostra apenas a bolinha */}
+      {!isOpen && (
+        <button
+          onClick={handleReopen}
+          className={`fixed ${positionClasses[position]} flex items-center justify-center rounded-full shadow-lg`}
+          style={{
+            width: '64px',
+            height: '64px',
+            backgroundColor: config.primaryColor || '#4F46E5',
+            color: '#fff',
+            border: 'none',
+            cursor: 'pointer',
+            zIndex: 60,
+          }}
+          aria-label="Abrir chat"
+        >
+          <MessageCircle size={28} />
+        </button>
+      )}
 
-      {/* Widget de chat simplificado */}
+      {/* Se estiver aberto */}
       {isOpen && (
-        <div className={`fixed ${positionClasses[position]} w-80 h-96 bg-white text-gray-800 rounded-lg shadow-xl border border-gray-200 flex flex-col`}>
-          {/* Header */}
-          <div
-            className="p-4 rounded-t-lg text-white font-semibold"
-            style={{ backgroundColor: primaryColor }}
-          >
-            {title}
-          </div>
-
-          {/* Conteúdo simples */}
-          <div className="flex-1 p-4">
-            <p>Widget funcionando! 🎉</p>
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue((e.target as HTMLInputElement).value)}
-              placeholder="Digite algo..."
-              className="w-full p-3 border border-gray-300 rounded-lg mt-4"
+        <div
+          id="chat-iframe-container"
+          className={`fixed ${positionClasses[position]} shadow-xl transition-all duration-300 ease-in-out`}
+          style={{
+            width: isMinimized ? '64px' : parseSize(width),
+            height: isMinimized ? '64px' : parseSize(height),
+            borderRadius: isMinimized ? '50%' : '0.5rem',
+            overflow: 'hidden',
+            zIndex: 55,
+            backgroundColor: isMinimized
+              ? config.primaryColor || '#4F46E5'
+              : 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          role="dialog"
+          aria-modal="true"
+        >
+          {isMinimized ? (
+            <button
+              onClick={() => {
+                setIsMinimized(false);
+                setIsOpen(true);
+              }}
+              style={{
+                width: '100%',
+                height: '100%',
+                border: 'none',
+                background: 'transparent',
+                color: '#fff',
+                cursor: 'pointer',
+              }}
+            >
+              <MessageCircle size={28} />
+            </button>
+          ) : (
+            <iframe
+              ref={iframeRef}
+              src={iframeUrl}
+              title="Chat"
+              className="w-full h-full border-0"
+              style={{
+                backgroundColor: 'transparent',
+                colorScheme: 'auto',
+              }}
+              allow="microphone; camera"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              loading="lazy"
             />
-            <p className="mt-2 text-sm text-gray-600">
-              Valor digitado: {inputValue}
-            </p>
-          </div>
+          )}
         </div>
       )}
     </div>
   );
-} 
+}
