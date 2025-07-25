@@ -24,7 +24,7 @@ export function Widget({ config }: WidgetProps) {
   const height = config.height ?? 600;
 
   // 🚀 se quiser trocar o flowId, basta passar aqui dinamicamente
-  const flowId = '6882cdb9928d72c6536c71a4';
+  const flowId = '688389642e4b04b550bc269c';
   const iframeUrl = `http://localhost:5173/widgets?theme=${theme}&flowId=${flowId}`;
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
