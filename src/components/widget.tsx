@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'preact/hooks';
-import { MessageCircle, Minimize2, X } from 'lucide-react';
+import { Minimize2, X } from 'lucide-react';
 
 interface WidgetConfig {
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
@@ -13,27 +13,45 @@ interface WidgetProps {
   config: WidgetConfig;
 }
 
+const ChatIcon = ({ size = 32 }: { size?: number }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M12 2C17.523 2 22 6.477 22 12C22 17.523 17.523 22 12 22C10.298 22 8.685 21.575 7.26 20.82L2 22L3.18 16.74C2.425 15.315 2 13.702 2 12C2 6.477 6.477 2 12 2Z"
+      fill="currentColor"
+      fillRule="evenodd"
+      clipRule="evenodd"
+    />
+    <circle cx="8" cy="12" r="1.5" fill="white" fillOpacity="0.9" />
+    <circle cx="12" cy="12" r="1.5" fill="white" fillOpacity="0.9" />
+    <circle cx="16" cy="12" r="1.5" fill="white" fillOpacity="0.9" />
+  </svg>
+);
+
 export function Widget({ config }: WidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
 
-  // valores padrão
   const position = config.position ?? 'bottom-right';
   const theme = config.theme ?? 'dark';
   const width = config.width ?? 384;
   const height = config.height ?? 600;
 
-  // 🚀 se quiser trocar o flowId, basta passar aqui dinamicamente
   const flowId = '688389642e4b04b550bc269c';
   const iframeUrl = `http://localhost:5173/widgets?theme=${theme}&flowId=${flowId}`;
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const positionClasses: Record<string, string> = {
-    'bottom-right': 'bottom-4 right-4',
-    'bottom-left': 'bottom-4 left-4',
-    'top-right': 'top-4 right-4',
-    'top-left': 'top-4 left-4',
+    'bottom-right': 'bottom-6 right-6',
+    'bottom-left': 'bottom-6 left-6',
+    'top-right': 'top-6 right-6',
+    'top-left': 'top-6 left-6',
   };
 
   useEffect(() => {
@@ -44,115 +62,106 @@ export function Widget({ config }: WidgetProps) {
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.data?.type === 'WIDGET_MINIMIZE') {
-        setIsMinimized(event.data.minimized);
-      }
+      if (event.data?.type === 'WIDGET_MINIMIZE') setIsMinimized(event.data.minimized);
       if (event.data?.type === 'WIDGET_CLOSE') {
         setIsOpen(false);
         setIsMinimized(false);
       }
     };
-
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
-  const parseSize = (size: number | string): string =>
-    typeof size === 'number' ? `${size}px` : size;
-
+  const parseSize = (size: number | string): string => (typeof size === 'number' ? `${size}px` : size);
   const handleOpen = () => {
     setIsOpen(true);
     setIsMinimized(false);
   };
-
   const handleClose = () => {
     setIsOpen(false);
     setIsMinimized(false);
   };
-
   const handleMinimize = () => setIsMinimized(true);
   const handleMaximize = () => setIsMinimized(false);
 
-  // 🔹 botão inicial
+  const buttonStyle = {
+    width: '60px',
+    height: '60px',
+    background: `linear-gradient(135deg, ${config.primaryColor ?? '#374151'} 0%, ${
+      config.primaryColor ?? '#4b5563'
+    }dd 100%)`,
+    color: '#fff',
+    border: 'none',
+    cursor: 'pointer',
+    borderRadius: '50%',
+  } as const;
+
   if (!isOpen) {
     return (
       <button
         onClick={handleOpen}
-        className={`fixed ${positionClasses[position]} flex items-center justify-center rounded-full shadow-lg hover:scale-110 transition-transform duration-200 z-50`}
-        style={{
-          width: '64px',
-          height: '64px',
-          backgroundColor: config.primaryColor ?? '#4F46E5',
-          color: '#fff',
-          border: 'none',
-          cursor: 'pointer',
-        }}
+        className={`fixed ${positionClasses[position]} flex items-center justify-center transition-transform duration-300 ease-out hover:scale-110 active:scale-95 z-50`}
+        style={buttonStyle}
         aria-label="Abrir chat"
       >
-        <MessageCircle size={28} />
+        <ChatIcon size={32} />
       </button>
     );
   }
 
-  // 🔹 botão minimizado
   if (isMinimized) {
     return (
       <button
         onClick={handleMaximize}
-        className={`fixed ${positionClasses[position]} flex items-center justify-center rounded-full shadow-lg hover:scale-110 transition-transform duration-200 z-50`}
-        style={{
-          width: '64px',
-          height: '64px',
-          backgroundColor: config.primaryColor ?? '#4F46E5',
-          color: '#fff',
-          border: 'none',
-          cursor: 'pointer',
-        }}
+        className={`fixed ${positionClasses[position]} flex items-center justify-center transition-transform duration-300 ease-out hover:scale-110 active:scale-95 z-50`}
+        style={buttonStyle}
         aria-label="Maximizar chat"
       >
-        <MessageCircle size={28} />
+        <ChatIcon size={32} />
       </button>
     );
   }
 
-  // 🔹 chat aberto
   return (
     <div
-      className={`fixed ${positionClasses[position]} shadow-xl transition-all duration-300 ease-in-out flex flex-col z-50`}
+      className={`fixed ${positionClasses[position]} flex flex-col z-50`}
       style={{
         width: parseSize(width),
         height: parseSize(height),
-        borderRadius: '0.75rem',
+        borderRadius: 12,
         overflow: 'hidden',
-        backgroundColor: theme === 'dark' ? '#1a1a1a' : '#ffffff',
+        backgroundColor: theme === 'dark' ? '#1f2937' : '#f3f4f6', // gray-800 / gray-100 shadcn
+        border: theme === 'dark' ? '1px solid #374151' : '1px solid #d1d5db', // gray-700 / gray-300
+        boxShadow: 'none',
       }}
       role="dialog"
       aria-modal="true"
     >
-      <div
-        className="flex items-center justify-between px-4 py-4"
+      <header
+        className="flex items-center justify-between px-5"
         style={{
-          backgroundColor: theme === 'dark' ? '#2d2d2d' : '#f8f9fa',
-          borderBottom:
-            theme === 'dark' ? '1px solid #404040' : '1px solid #e9ecef',
-          color: theme === 'dark' ? '#ffffff' : '#1a1a1a',
-          minHeight: '64px',
+          background: theme === 'dark' ? '#111827' : '#e5e7eb', // gray-900 / gray-200
+          borderBottom: theme === 'dark' ? '1px solid #4b5563' : '1px solid #d1d5db', // gray-600 / gray-300
+          color: theme === 'dark' ? '#e0e7ff' : '#374151', // indigo-100 / gray-700
+          minHeight: 56,
         }}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <div
-            className="w-2 h-2 rounded-full"
-            style={{ backgroundColor: config.primaryColor ?? '#4F46E5' }}
+            className="w-3 h-3 rounded-full"
+            style={{
+              background: config.primaryColor ?? (theme === 'dark' ? '#2563eb' : '#3b82f6'),
+            }}
           />
-          <span className="font-semibold text-sm">Leadnator</span>
+          <span className="font-semibold text-sm tracking-tight">Leadnator</span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <button
             onClick={handleMinimize}
-            className="p-2"
+            className="p-2 rounded hover:bg-gray-700"
             style={{
-              color: '#888888',
+              color: theme === 'dark' ? '#cbd5e1' : '#4b5563',
               backgroundColor: 'transparent',
               border: 'none',
               cursor: 'pointer',
@@ -164,9 +173,9 @@ export function Widget({ config }: WidgetProps) {
 
           <button
             onClick={handleClose}
-            className="p-2"
+            className="p-2 rounded hover:bg-gray-700"
             style={{
-              color: '#888888',
+              color: theme === 'dark' ? '#cbd5e1' : '#4b5563',
               backgroundColor: 'transparent',
               border: 'none',
               cursor: 'pointer',
@@ -176,9 +185,9 @@ export function Widget({ config }: WidgetProps) {
             <X size={16} />
           </button>
         </div>
-      </div>
+      </header>
 
-      <div className="flex-1 overflow-hidden">
+      <main className="flex-1 overflow-hidden">
         <iframe
           ref={iframeRef}
           src={iframeUrl}
@@ -189,7 +198,7 @@ export function Widget({ config }: WidgetProps) {
           sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
           loading="lazy"
         />
-      </div>
+      </main>
     </div>
   );
 }
