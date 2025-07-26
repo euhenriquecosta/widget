@@ -27,7 +27,7 @@
     "typescript": "~5.8.3",
     "vite": "^4.5.14"
   },
-  "author": "Seu Nome ou Sua Empresa",
+  "author": "Guilherme Alves & Euhenrique Costa",
   "license": "MIT",
   "keywords": [
     "chat-widget",
