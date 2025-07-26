@@ -6,7 +6,7 @@ import './index.css';
 // Mapa para gerenciar múltiplos widgets
 const widgetInstances = new Map<string, HTMLDivElement>();
 
-export function initWidget(config: WidgetConfig = {}) {
+export function initWidget(config: WidgetConfig = { title: 'Default Widget Title' }) {
   const widgetId = config.id || 'default-widget';
 
   // Remove widget existente se houver

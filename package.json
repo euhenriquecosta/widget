@@ -1,9 +1,10 @@
 {
   "name": "chat-widget",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0", 
+  "description": "A customizable chat widget built with Preact",  
+  "main": "dist/chat-widget.umd.js", 
   "type": "module",
-  "main": "dist/chat-widget.umd.cjs",
+  "private": false, 
   "scripts": {
     "dev": "pnpm build:widget && npx open-cli example.html",
     "build": "tsc -b && vite build",
@@ -25,5 +26,22 @@
     "tailwindcss": "^4.1.11",
     "typescript": "~5.8.3",
     "vite": "^4.5.14"
-  }
+  },
+  "author": "Seu Nome ou Sua Empresa",
+  "license": "MIT",
+  "keywords": [
+    "chat-widget",
+    "preact",
+    "widget",
+    "customizable",
+    "UI"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/euhenriquecosta/widget"
+  },
+  "bugs": {
+    "url": "https://github.com/euhenriquecosta/widget/issues"
+  },
+  "homepage": "https://github.com/euhenriquecosta/widget#readme"
 }

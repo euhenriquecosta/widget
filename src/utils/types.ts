@@ -35,29 +35,18 @@ export interface ChatStep {
 }
 
 export interface WidgetConfig {
-  // Identificação
-  id?: string;                    // ID único do widget (futuramente para múltiplos widgets)
-  
-  // Aparência
-  title?: string;                 // Título do widget
+  id?: string;
+  title: string;  // Tornando 'title' obrigatório
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
-  primaryColor?: string;          // Cor primária (hex)
-  theme?: 'light' | 'dark';      // Tema do widget
-  
-  // Comportamento
-  autoOpen?: boolean;             // Abrir automaticamente
-  showAvatar?: boolean;           // Mostrar avatar do bot
-  showTimestamp?: boolean;        // Mostrar timestamp nas mensagens
-  
-  // Personalização
-  welcomeMessage?: string;        // Mensagem de boas-vindas personalizada
-  successMessage?: string;        // Mensagem de sucesso personalizada
-  
-  // Integração (futuro)
-  apiEndpoint?: string;          // Endpoint da API
-  apiKey?: string;               // Chave da API
-  
-  // Analytics (futuro)
-  trackingId?: string;           // ID do Google Analytics
-  enableTracking?: boolean;      // Habilitar tracking
-} 
+  primaryColor?: string;
+  theme?: 'light' | 'dark';
+  autoOpen?: boolean;
+  showAvatar?: boolean;
+  showTimestamp?: boolean;
+  welcomeMessage?: string;
+  successMessage?: string;
+  apiEndpoint?: string;
+  apiKey?: string;
+  trackingId?: string;
+  enableTracking?: boolean;
+}
