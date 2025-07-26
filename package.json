@@ -1,10 +1,10 @@
 {
-  "name": "@guialves/chat-widget",
-  "version": "1.0.0", 
-  "description": "A customizable chat widget built with Preact",  
-  "main": "dist/chat-widget.umd.js", 
+  "name": "chat-widget",
+  "version": "1.0.0",
+  "description": "A customizable chat widget built with Preact",
+  "main": "dist/chat-widget.umd.js",
   "type": "module",
-  "private": false, 
+  "private": false,
   "scripts": {
     "dev": "pnpm build:widget && npx open-cli example.html",
     "build": "tsc -b && vite build",
