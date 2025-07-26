@@ -1,5 +1,5 @@
 {
-  "name": "chat-widget",
+  "name": "@leadnator/chat-widget",
   "version": "1.0.0", 
   "description": "A customizable chat widget built with Preact",  
   "main": "dist/chat-widget.umd.js", 
