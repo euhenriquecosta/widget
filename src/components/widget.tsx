@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import { Minimize2, X } from 'lucide-react';
 
 interface WidgetConfig {
+  title: string;
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
   primaryColor?: string;
   theme?: 'light' | 'dark';
@@ -153,7 +154,7 @@ export function Widget({ config }: WidgetProps) {
               background: config.primaryColor ?? (theme === 'dark' ? '#2563eb' : '#3b82f6'),
             }}
           />
-          <span className="font-semibold text-sm tracking-tight">Leadnator</span>
+          <span className="font-semibold text-sm tracking-tight">{config.title}</span>
         </div>
 
         <div className="flex items-center gap-1">
