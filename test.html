@@ -3,36 +3,281 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teste - Chat Widget</title>
+  <title>Teste - Opções de Acionamento do Widget</title>
   <style>
-    html, body {
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       margin: 0;
-      padding: 0;
-      height: 100%;
-      background-color: #000; /* mesmo fundo do seu chat */
-    }
-    h1 { color: #fff; text-align: center; }
-    p { line-height: 1.6; color: #ccc; }
-    .container {
       padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      text-align: center;
+      color: #2d3748;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+    }
+    
+    .trigger-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+    
+    .trigger-card {
+      background: #f7fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+    
+    .trigger-card:hover {
+      border-color: #4299e1;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .trigger-card h3 {
+      color: #2d3748;
+      margin: 0 0 12px 0;
+      font-size: 1.3rem;
+    }
+    
+    .trigger-card p {
+      color: #4a5568;
+      margin: 0 0 20px 0;
+      line-height: 1.6;
+    }
+    
+    .trigger-card code {
+      background: #edf2f7;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 0.9rem;
+      color: #2d3748;
+    }
+    
+    .test-button {
+      background: #4299e1;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+    
+    .test-button:hover {
+      background: #3182ce;
+      transform: translateY(-1px);
+    }
+    
+    .controls {
+      text-align: center;
+      margin: 30px 0;
+      padding: 20px;
+      background: #edf2f7;
+      border-radius: 12px;
+    }
+    
+    .controls button {
+      background: #e53e3e;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 0 10px;
+      transition: all 0.2s ease;
+    }
+    
+    .controls button:hover {
+      background: #c53030;
+    }
+    
+    .scroll-area {
+      height: 1500px;
+      background: linear-gradient(to bottom, #f7fafc, #edf2f7);
+      margin: 30px 0;
+      padding: 40px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .scroll-area h3 {
+      color: #2d3748;
+      margin-bottom: 20px;
+    }
+    
+    .status {
+      background: #e6fffa;
+      border: 1px solid #81e6d9;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+      text-align: center;
+      color: #234e52;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Teste do Chat Widget</h1>
-    <p>Esta é uma página de teste. O widget aparecerá no canto inferior direito.</p>
-    <p>Clique no ícone de chat para testar o formulário.</p>
+    <h1>🚀 Opções de Acionamento do Widget</h1>
+    
+    <div class="status" id="status">
+      Widget não inicializado. Escolha uma opção de acionamento abaixo.
+    </div>
+    
+    <div class="trigger-grid">
+      <div class="trigger-card">
+        <h3>🎯 Abertura Imediata</h3>
+        <p>O widget abre automaticamente assim que a página carrega.</p>
+        <code>trigger: 'immediate'</code>
+        <button class="test-button" onclick="testImmediate()">Testar Abertura Imediata</button>
+      </div>
+      
+      <div class="trigger-card">
+        <h3>⏰ Abertura com Delay</h3>
+        <p>O widget abre após 3 segundos de carregamento da página.</p>
+        <code>trigger: 'delayed', autoOpenDelay: 3000</code>
+        <button class="test-button" onclick="testDelayed()">Testar Abertura com Delay</button>
+      </div>
+      
+      <div class="trigger-card">
+        <h3>📜 Abertura por Scroll</h3>
+        <p>O widget abre quando você rola 50% da página.</p>
+        <code>trigger: 'scroll', scrollThreshold: 50</code>
+        <button class="test-button" onclick="testScroll()">Testar Abertura por Scroll</button>
+      </div>
+      
+      <div class="trigger-card">
+        <h3>🚪 Exit Intent</h3>
+        <p>O widget abre quando o mouse sai da janela (tentativa de sair).</p>
+        <code>trigger: 'exit-intent'</code>
+        <button class="test-button" onclick="testExitIntent()">Testar Exit Intent</button>
+      </div>
+      
+      <div class="trigger-card">
+        <h3>🔘 Abertura por Botão</h3>
+        <p>O widget abre apenas quando você clica no botão flutuante.</p>
+        <code>trigger: 'button'</code>
+        <button class="test-button" onclick="testButton()">Testar Abertura por Botão</button>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button onclick="destroyWidget()">🗑️ Destruir Widget</button>
+      <button onclick="location.reload()">🔄 Recarregar Página</button>
+    </div>
+    
+    <div class="scroll-area">
+      <h3>📜 Área de Scroll para Teste</h3>
+      <p>Role para baixo para testar o trigger de scroll.</p>
+      <p>O widget abrirá automaticamente quando você atingir 50% da página.</p>
+      <p>Este conteúdo é apenas para demonstrar a funcionalidade.</p>
+    </div>
   </div>
 
-  <!-- Importa o bundle do widget -->
   <script src="./dist/chat-widget.umd.cjs"></script>
   <script>
-    ChatWidget.initWidget({
-      title: "Fale conosco",
-      position: "bottom-right",
-      primaryColor: "#000000", // botão preto
-      theme: "dark"
+    let currentWidget = null;
+    
+    function updateStatus(message) {
+      document.getElementById('status').innerHTML = message;
+    }
+    
+    function destroyWidget() {
+      if (typeof ChatWidget !== 'undefined') {
+        ChatWidget.destroyAllWidgets();
+        currentWidget = null;
+        updateStatus('✅ Widget destruído com sucesso!');
+      }
+    }
+    
+    function testImmediate() {
+      destroyWidget();
+      currentWidget = ChatWidget.initWidget({
+        title: "Abertura Imediata",
+        position: "bottom-right",
+        primaryColor: "#10b981",
+        theme: "dark",
+        trigger: "immediate"
+      });
+      updateStatus('🚀 Widget configurado para abertura imediata!');
+    }
+    
+    function testDelayed() {
+      destroyWidget();
+      currentWidget = ChatWidget.initWidget({
+        title: "Abertura com Delay",
+        position: "bottom-right",
+        primaryColor: "#f59e0b",
+        theme: "dark",
+        trigger: "delayed",
+        autoOpenDelay: 3000
+      });
+      updateStatus('⏰ Widget configurado para abertura em 3 segundos!');
+    }
+    
+    function testScroll() {
+      destroyWidget();
+      currentWidget = ChatWidget.initWidget({
+        title: "Abertura por Scroll",
+        position: "bottom-right",
+        primaryColor: "#8b5cf6",
+        theme: "dark",
+        trigger: "scroll",
+        scrollThreshold: 50
+      });
+      updateStatus('📜 Widget configurado para abertura ao rolar 50% da página!');
+    }
+    
+    function testExitIntent() {
+      destroyWidget();
+      currentWidget = ChatWidget.initWidget({
+        title: "Exit Intent",
+        position: "bottom-right",
+        primaryColor: "#ef4444",
+        theme: "dark",
+        trigger: "exit-intent"
+      });
+      updateStatus('🚪 Widget configurado para abertura por exit intent!');
+    }
+    
+    function testButton() {
+      destroyWidget();
+      currentWidget = ChatWidget.initWidget({
+        title: "Abertura por Botão",
+        position: "bottom-right",
+        primaryColor: "#3b82f6",
+        theme: "dark",
+        trigger: "button"
+      });
+      updateStatus('🔘 Widget configurado para abertura por botão!');
+    }
+    
+    // Inicializa com abertura por botão por padrão
+    window.addEventListener('load', () => {
+      testButton();
     });
   </script>
 </body>

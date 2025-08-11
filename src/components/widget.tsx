@@ -1,14 +1,6 @@
-import { useState } from 'preact/hooks';
 import { X } from 'lucide-react';
-
-interface WidgetConfig {
-  title: string;
-  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
-  primaryColor?: string;
-  theme?: 'light' | 'dark';
-  width?: number | string;
-  height?: number | string;
-}
+import type { WidgetConfig } from '../utils/types';
+import { useWidgetTrigger } from '../utils/hooks';
 
 interface WidgetProps {
   config: WidgetConfig;
@@ -35,14 +27,19 @@ const ChatIcon = ({ size = 32 }: { size?: number }) => (
 );
 
 export function Widget({ config }: WidgetProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
   const position = config.position ?? 'bottom-right';
   const theme = config.theme ?? 'dark';
   const width = config.width ?? 384;
   const height = config.height ?? 600;
 
-  const flowId = '688389642e4b04b550bc269c';
+  const trigger = config.trigger ?? (config.autoOpen ? 'immediate' : 'button');
+  const { isOpen, setIsOpen } = useWidgetTrigger({
+    trigger,
+    autoOpenDelay: config.autoOpenDelay,
+    scrollThreshold: config.scrollThreshold
+  });
+
+  const flowId = '68963b901d3edd1d9dfb13cd';
   const iframeUrl = `http://localhost:3000/widgets?theme=${theme}&flowId=${flowId}`;
 
   const positionClasses = {
@@ -108,7 +105,7 @@ export function Widget({ config }: WidgetProps) {
 
         <button
           onClick={() => setIsOpen(false)}
-          className="p-2 rounded hover:bg-gray-700"
+          className="rounded !px-0 !mx-0 hover:bg-gray-700"
           style={{
             color: theme === 'dark' ? '#cbd5e1' : '#4b5563',
             backgroundColor: 'transparent',

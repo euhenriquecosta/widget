@@ -88,171 +88,178 @@
       font-family: monospace;
       font-size: 12px;
     }
+
+    .trigger-examples {
+      margin: 20px 0;
+    }
+
+    .trigger-example {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+
+    .trigger-example h4 {
+      color: #1976d2;
+      margin: 0 0 10px 0;
+    }
+
+    .trigger-example code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <h1>Exemplo - Chat Widget</h1>
-    <p>Esta é uma página de exemplo para testar o widget de chat com diferentes configurações.</p>
+    <h1>🚀 Chat Widget - Novas Opções de Acionamento</h1>
+    <p>Esta página demonstra as novas funcionalidades de acionamento automático do widget de chat.</p>
 
-    <div class="debug-info" id="debug-info">
-      <strong>Debug Info:</strong><br />
-      Aguardando carregamento...
-    </div>
+    <div class="trigger-examples">
+      <h3>🎯 Opções de Acionamento Disponíveis:</h3>
+      
+      <div class="trigger-example">
+        <h4>1. Abertura Imediata</h4>
+        <p>O widget abre automaticamente assim que a página carrega.</p>
+        <code>trigger: 'immediate'</code>
+        <button onclick="initImmediateWidget()">Testar Abertura Imediata</button>
+      </div>
 
-    <div class="config-section">
-      <h3>Configurações do Widget</h3>
-      <div class="config-grid">
-        <div class="config-item">
-          <h4>Widget Padrão</h4>
-          <p>Configuração básica com posição inferior direita</p>
-          <button onclick="initWidgetDefault()">Inicializar</button>
-        </div>
-        <div class="config-item">
-          <h4>Widget Esquerda</h4>
-          <p>Posicionado no canto inferior esquerdo</p>
-          <button onclick="initWidgetLeft()">Inicializar</button>
-        </div>
-        <div class="config-item">
-          <h4>Widget Personalizado</h4>
-          <p>Cor roxa e mensagem personalizada</p>
-          <button onclick="initWidgetCustom()">Inicializar</button>
-        </div>
-        <div class="config-item">
-          <h4>Widget Dark</h4>
-          <p>Tema escuro</p>
-          <button onclick="initWidgetDark()">Inicializar</button>
-        </div>
-        <div class="config-item">
-          <h4>Widget com Timestamp</h4>
-          <p>Mostra horário nas mensagens</p>
-          <button onclick="initWidgetTimestamp()">Inicializar</button>
-        </div>
+      <div class="trigger-example">
+        <h4>2. Abertura com Delay</h4>
+        <p>O widget abre após um tempo definido (padrão: 3 segundos).</p>
+        <code>trigger: 'delayed', autoOpenDelay: 5000</code>
+        <button onclick="initDelayedWidget()">Testar Abertura com Delay (5s)</button>
+      </div>
+
+      <div class="trigger-example">
+        <h4>3. Abertura por Scroll</h4>
+        <p>O widget abre quando o usuário rola 50% da página.</p>
+        <code>trigger: 'scroll', scrollThreshold: 50</code>
+        <button onclick="initScrollWidget()">Testar Abertura por Scroll</button>
+      </div>
+
+      <div class="trigger-example">
+        <h4>4. Abertura por Exit Intent</h4>
+        <p>O widget abre quando o mouse sai da janela (tentativa de sair).</p>
+        <code>trigger: 'exit-intent'</code>
+        <button onclick="initExitIntentWidget()">Testar Exit Intent</button>
+      </div>
+
+      <div class="trigger-example">
+        <h4>5. Abertura por Botão (Padrão)</h4>
+        <p>O widget abre apenas quando o usuário clica no botão flutuante.</p>
+        <code>trigger: 'button'</code>
+        <button onclick="initButtonWidget()">Testar Abertura por Botão</button>
       </div>
     </div>
 
     <div class="config-section">
-      <h3>Gerenciamento</h3>
-      <button onclick="destroyCurrentWidget()">Destruir Widget Atual</button>
-      <button onclick="destroyAllWidgets()">Destruir Todos</button>
+      <h3>🔧 Controles</h3>
+      <button onclick="destroyAllWidgets()">Destruir Todos os Widgets</button>
+      <button onclick="location.reload()">Recarregar Página</button>
     </div>
 
-    <p>Clique em um dos botões acima para testar diferentes configurações do widget.</p>
+    <div class="debug-info" id="debug-info">
+      <strong>Debug Info:</strong><br />
+      Widget não inicializado
+    </div>
+
+    <!-- Adiciona conteúdo para testar scroll -->
+    <div style="height: 2000px; background: linear-gradient(to bottom, #f0f0f0, #e0e0e0); padding: 20px; margin-top: 40px;">
+      <h3>📜 Área de Scroll para Teste</h3>
+      <p>Role para baixo para testar o trigger de scroll. O widget abrirá automaticamente quando você atingir 50% da página.</p>
+      <p>Este conteúdo é apenas para demonstrar a funcionalidade de scroll.</p>
+    </div>
   </div>
 
-  <script>
-    function updateDebugInfo(message) {
-      const debugEl = document.getElementById('debug-info');
-      if (debugEl) {
-        debugEl.innerHTML = '<strong>Debug Info:</strong><br>' + message;
-      }
-      console.log('📝 Debug:', message);
-    }
-
-    updateDebugInfo('Carregando script do widget...');
-  </script>
-
-  <!-- O bundle do seu widget buildado -->
-  <script src="./dist/chat-widget.umd.cjs" onload="updateDebugInfo('✅ Script do widget carregado!')"
-    onerror="updateDebugInfo('❌ ERRO: Falha ao carregar script!')"></script>
-
+  <!-- Importa o bundle do widget -->
+  <script src="./dist/chat-widget.umd.cjs"></script>
   <script>
     let currentWidget = null;
 
-    function initWidgetDefault() {
-      updateDebugInfo('Inicializando widget padrão...');
-      if (typeof ChatWidget === 'undefined') {
-        updateDebugInfo('ERRO: ChatWidget não está definido!');
-        return;
-      }
-      currentWidget = ChatWidget.initWidget({
-        id: 'default',
-        title: 'Fale conosco',
-        position: 'bottom-right',
-        primaryColor: '#3B82F6',
-        theme: 'light',
-        width: 400,
-        height: 600,
-      });
-      updateDebugInfo('Widget padrão inicializado!');
+    function updateDebugInfo(message) {
+      document.getElementById('debug-info').innerHTML = `<strong>Debug Info:</strong><br />${message}`;
     }
 
-    function initWidgetLeft() {
-      updateDebugInfo('Inicializando widget esquerda (light)...');
+    function initImmediateWidget() {
+      destroyAllWidgets();
       currentWidget = ChatWidget.initWidget({
-        id: 'left',
-        title: 'Suporte',
-        position: 'bottom-left',
-        primaryColor: '#10B981',
-        theme: 'light',
+        title: "Abertura Imediata",
+        position: "bottom-right",
+        primaryColor: "#10b981",
+        theme: "dark",
+        trigger: "immediate"
       });
-      updateDebugInfo('Widget esquerda (light) inicializado!');
+      updateDebugInfo("Widget configurado para abertura imediata");
     }
 
-    function initWidgetCustom() {
-      updateDebugInfo('Inicializando widget personalizado...');
+    function initDelayedWidget() {
+      destroyAllWidgets();
       currentWidget = ChatWidget.initWidget({
-        id: 'custom',
-        title: 'Contato',
-        position: 'bottom-right',
-        primaryColor: '#8B5CF6',
+        title: "Abertura com Delay",
+        position: "bottom-right",
+        primaryColor: "#f59e0b",
+        theme: "dark",
+        trigger: "delayed",
+        autoOpenDelay: 5000
       });
-      updateDebugInfo('Widget personalizado inicializado!');
+      updateDebugInfo("Widget configurado para abertura em 5 segundos");
     }
 
-    function initWidgetDark() {
-      updateDebugInfo('Inicializando widget dark...');
+    function initScrollWidget() {
+      destroyAllWidgets();
       currentWidget = ChatWidget.initWidget({
-        id: 'dark',
-        title: 'Suporte Técnico',
-        position: 'bottom-right',
-        primaryColor: '#1F2937',
-        theme: 'dark',
+        title: "Abertura por Scroll",
+        position: "bottom-right",
+        primaryColor: "#8b5cf6",
+        theme: "dark",
+        trigger: "scroll",
+        scrollThreshold: 50
       });
-      updateDebugInfo('Widget dark inicializado!');
+      updateDebugInfo("Widget configurado para abertura ao rolar 50% da página");
     }
 
-    function initWidgetTimestamp() {
-      updateDebugInfo('Inicializando widget com timestamp...');
+    function initExitIntentWidget() {
+      destroyAllWidgets();
       currentWidget = ChatWidget.initWidget({
-        id: 'timestamp',
-        title: 'Chat com Horário',
-        position: 'bottom-right',
-        primaryColor: '#059669',
+        title: "Exit Intent",
+        position: "bottom-right",
+        primaryColor: "#ef4444",
+        theme: "dark",
+        trigger: "exit-intent"
       });
-      updateDebugInfo('Widget com timestamp inicializado!');
+      updateDebugInfo("Widget configurado para abertura por exit intent");
     }
 
-    function destroyCurrentWidget() {
-      if (currentWidget) {
-        currentWidget.destroy();
-        currentWidget = null;
-        updateDebugInfo('Widget atual destruído!');
-      } else {
-        updateDebugInfo('Nenhum widget ativo para destruir.');
-      }
+    function initButtonWidget() {
+      destroyAllWidgets();
+      currentWidget = ChatWidget.initWidget({
+        title: "Abertura por Botão",
+        position: "bottom-right",
+        primaryColor: "#3b82f6",
+        theme: "dark",
+        trigger: "button"
+      });
+      updateDebugInfo("Widget configurado para abertura por botão");
     }
 
     function destroyAllWidgets() {
       if (typeof ChatWidget !== 'undefined') {
         ChatWidget.destroyAllWidgets();
         currentWidget = null;
-        updateDebugInfo('Todos os widgets foram destruídos!');
-      } else {
-        updateDebugInfo('ChatWidget não está definido!');
+        updateDebugInfo("Todos os widgets foram destruídos");
       }
     }
 
+    // Inicializa com abertura por botão por padrão
     window.addEventListener('load', () => {
-      setTimeout(() => {
-        if (typeof ChatWidget !== 'undefined') {
-          updateDebugInfo('ChatWidget disponível. Inicializando padrão...');
-          initWidgetDefault();
-        } else {
-          updateDebugInfo('❌ ERRO: ChatWidget não disponível.');
-        }
-      }, 500);
+      initButtonWidget();
     });
   </script>
 </body>
