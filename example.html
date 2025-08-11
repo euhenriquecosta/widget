@@ -5,261 +5,725 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="dark" />
-  <title>Exemplo - Chat Widget (Build)</title>
+  <title>🚀 Chat Widget - Configurador Interativo</title>
   <link rel="stylesheet" href="./dist/style.css" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    * {
       margin: 0;
-      padding: 20px;
-      background-color: #f5f5f5;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+      line-height: 1.6;
     }
 
     .container {
-      max-width: 800px;
+      max-width: 1200px;
       margin: 0 auto;
-      background: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-      color: #333;
-      text-align: center;
-    }
-
-    p {
-      line-height: 1.6;
-      color: #666;
-    }
-
-    .config-section {
-      margin: 20px 0;
       padding: 20px;
-      background: #f8f9fa;
-      border-radius: 8px;
     }
 
-    button {
-      background: #3b82f6;
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
       color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin: 5px;
     }
 
-    button:hover {
-      background: #2563eb;
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
-    .config-grid {
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .main-content {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .config-panel {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+
+    .config-panel h2 {
+      color: #2d3748;
+      margin-bottom: 25px;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .config-group {
+      margin-bottom: 25px;
+    }
+
+    .config-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 0.95rem;
+    }
+
+    .config-group input,
+    .config-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+
+    .config-group input:focus,
+    .config-group select:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .config-group input[type="color"] {
+      height: 50px;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .config-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .trigger-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 10px;
       margin-top: 10px;
     }
 
-    .config-item {
+    .trigger-option {
+      position: relative;
+    }
+
+    .trigger-option input[type="radio"] {
+      display: none;
+    }
+
+    .trigger-option label {
+      display: block;
+      padding: 12px 16px;
+      background: #f7fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .trigger-option input[type="radio"]:checked + label {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .trigger-option label:hover {
+      border-color: #667eea;
+      transform: translateY(-1px);
+    }
+
+    .preview-panel {
       background: white;
-      padding: 15px;
-      border-radius: 4px;
-      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      text-align: center;
     }
 
-    .config-item h4 {
-      margin: 0 0 10px 0;
-      color: #333;
+    .preview-panel h2 {
+      color: #2d3748;
+      margin-bottom: 25px;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
-    .config-item p {
-      margin: 0;
-      font-size: 14px;
-      color: #666;
-    }
-
-    .debug-info {
-      background: #f0f0f0;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 12px;
-    }
-
-    .trigger-examples {
+    .widget-preview {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e0;
+      border-radius: 15px;
+      padding: 40px 20px;
       margin: 20px 0;
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
     }
 
-    .trigger-example {
-      background: #e3f2fd;
-      border-left: 4px solid #2196f3;
-      padding: 15px;
-      margin: 10px 0;
-      border-radius: 4px;
+    .widget-preview.active {
+      border-color: #667eea;
+      background: #f0f4ff;
     }
 
-    .trigger-example h4 {
-      color: #1976d2;
-      margin: 0 0 10px 0;
+    .preview-placeholder {
+      color: #718096;
+      font-size: 1.1rem;
+      text-align: center;
     }
 
-    .trigger-example code {
-      background: #f5f5f5;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-family: monospace;
+    .preview-placeholder svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #5a67d8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+      transform: translateY(-1px);
+    }
+
+    .btn-danger {
+      background: #e53e3e;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c53030;
+      transform: translateY(-1px);
+    }
+
+    .status-bar {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #f8fafc;
+      border-radius: 8px;
+    }
+
+    .status-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .status-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: white;
+    }
+
+    .status-icon.success {
+      background: #10b981;
+    }
+
+    .status-icon.info {
+      background: #3b82f6;
+    }
+
+    .status-icon.warning {
+      background: #f59e0b;
+    }
+
+    .scroll-test-area {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .scroll-test-area h3 {
+      color: #2d3748;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .scroll-content {
+      height: 1500px;
+      background: linear-gradient(to bottom, #f7fafc, #edf2f7);
+      border-radius: 15px;
+      padding: 40px;
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .scroll-marker {
+      background: #667eea;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      position: sticky;
+      top: 20px;
+      z-index: 10;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .config-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .trigger-options {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+    }
+
+    .config-tabs {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 20px;
+      background: #f1f5f9;
+      padding: 5px;
+      border-radius: 10px;
+    }
+
+    .config-tab {
+      flex: 1;
+      padding: 10px 15px;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      color: #64748b;
+      transition: all 0.3s ease;
+    }
+
+    .config-tab.active {
+      background: white;
+      color: #667eea;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <h1>🚀 Chat Widget - Novas Opções de Acionamento</h1>
-    <p>Esta página demonstra as novas funcionalidades de acionamento automático do widget de chat.</p>
+    <div class="header">
+      <h1>🚀 Chat Widget</h1>
+      <p>Configurador Interativo - Teste todas as funcionalidades</p>
+    </div>
 
-    <div class="trigger-examples">
-      <h3>🎯 Opções de Acionamento Disponíveis:</h3>
+    <div class="main-content">
+      <!-- Painel de Configuração -->
+      <div class="config-panel">
+        <h2>⚙️ Configurações</h2>
+        
+        <div class="config-tabs">
+          <button class="config-tab active" onclick="showTab('basic')">Básico</button>
+          <button class="config-tab" onclick="showTab('advanced')">Avançado</button>
+          <button class="config-tab" onclick="showTab('triggers')">Triggers</button>
+        </div>
+
+        <!-- Tab Básico -->
+        <div id="basic" class="tab-content active">
+          <div class="config-group">
+            <label for="title">Título do Widget</label>
+            <input type="text" id="title" value="Fale conosco" placeholder="Digite o título">
+          </div>
+
+          <div class="config-group">
+            <label for="position">Posição</label>
+            <select id="position">
+              <option value="bottom-right">Canto Inferior Direito</option>
+              <option value="bottom-left">Canto Inferior Esquerdo</option>
+              <option value="top-right">Canto Superior Direito</option>
+              <option value="top-left">Canto Superior Esquerdo</option>
+            </select>
+          </div>
+
+          <div class="config-row">
+            <div class="config-group">
+              <label for="width">Largura</label>
+              <input type="number" id="width" value="384" min="300" max="800">
+            </div>
+            <div class="config-group">
+              <label for="height">Altura</label>
+              <input type="number" id="height" value="600" min="400" max="800">
+            </div>
+          </div>
+
+          <div class="config-group">
+            <label for="theme">Tema</label>
+            <select id="theme">
+              <option value="dark">Escuro</option>
+              <option value="light">Claro</option>
+            </select>
+          </div>
+
+          <div class="config-group">
+            <label for="primaryColor">Cor Primária</label>
+            <input type="color" id="primaryColor" value="#667eea">
+          </div>
+        </div>
+
+        <!-- Tab Avançado -->
+        <div id="advanced" class="tab-content">
+          <div class="config-group">
+            <label for="endpoint">Endpoint (opcional)</label>
+            <input type="text" id="endpoint" placeholder="https://api.exemplo.com">
+          </div>
+
+          <div class="config-group">
+            <label for="autoOpen">Abrir Automaticamente</label>
+            <select id="autoOpen">
+              <option value="false">Não</option>
+              <option value="true">Sim</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tab Triggers -->
+        <div id="triggers" class="tab-content">
+          <div class="config-group">
+            <label>Tipo de Acionamento</label>
+            <div class="trigger-options">
+              <div class="trigger-option">
+                <input type="radio" id="trigger-button" name="trigger" value="button" checked>
+                <label for="trigger-button">Botão</label>
+              </div>
+              <div class="trigger-option">
+                <input type="radio" id="trigger-immediate" name="trigger" value="immediate">
+                <label for="trigger-immediate">Imediato</label>
+              </div>
+              <div class="trigger-option">
+                <input type="radio" id="trigger-delayed" name="trigger" value="delayed">
+                <label for="trigger-delayed">Delay</label>
+              </div>
+              <div class="trigger-option">
+                <input type="radio" id="trigger-scroll" name="trigger" value="scroll">
+                <label for="trigger-scroll">Scroll</label>
+              </div>
+              <div class="trigger-option">
+                <input type="radio" id="trigger-exit" name="trigger" value="exit-intent">
+                <label for="trigger-exit">Exit Intent</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="config-group" id="delayGroup" style="display: none;">
+            <label for="autoOpenDelay">Delay (milissegundos)</label>
+            <input type="number" id="autoOpenDelay" value="3000" min="1000" max="30000" step="1000">
+          </div>
+
+          <div class="config-group" id="scrollGroup" style="display: none;">
+            <label for="scrollThreshold">Porcentagem de Scroll (%)</label>
+            <input type="number" id="scrollThreshold" value="50" min="10" max="90" step="10">
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn btn-primary" onclick="applyConfig()">
+            ✅ Aplicar Configuração
+          </button>
+          <button class="btn btn-secondary" onclick="resetConfig()">
+            🔄 Resetar
+          </button>
+        </div>
+      </div>
+
+      <!-- Painel de Preview -->
+      <div class="preview-panel">
+        <h2>👁️ Preview</h2>
+        
+        <div class="widget-preview" id="widgetPreview">
+          <div class="preview-placeholder">
+            <svg fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C17.523 2 22 6.477 22 12C22 17.523 17.523 22 12 22C10.298 22 8.685 21.575 7.26 20.82L2 22L3.18 16.74C2.425 15.315 2 13.702 2 12C2 6.477 6.477 2 12 2Z"/>
+              <circle cx="8" cy="12" r="1.5" fill="white" fill-opacity="0.9"/>
+              <circle cx="12" cy="12" r="1.5" fill="white" fill-opacity="0.9"/>
+              <circle cx="16" cy="12" r="1.5" fill="white" fill-opacity="0.9"/>
+            </svg>
+            <p>Configure o widget e clique em "Aplicar Configuração"</p>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn btn-danger" onclick="destroyWidget()" id="destroyBtn" style="display: none;">
+            🗑️ Destruir Widget
+          </button>
+        </div>
+
+        <div class="status-bar">
+          <div class="status-item">
+            <div class="status-icon info">ℹ️</div>
+            <span id="statusText">Widget não configurado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Área de Teste de Scroll -->
+    <div class="scroll-test-area">
+      <h3>📜 Área de Teste de Scroll</h3>
+      <p>Role para baixo para testar o trigger de scroll. O widget abrirá automaticamente quando você atingir a porcentagem configurada.</p>
       
-      <div class="trigger-example">
-        <h4>1. Abertura Imediata</h4>
-        <p>O widget abre automaticamente assim que a página carrega.</p>
-        <code>trigger: 'immediate'</code>
-        <button onclick="initImmediateWidget()">Testar Abertura Imediata</button>
+      <div class="scroll-content">
+        <div class="scroll-marker">🎯 Ponto de Scroll</div>
+        <p>Este conteúdo é apenas para demonstrar a funcionalidade de scroll.</p>
+        <p>Role para baixo para testar o comportamento automático do widget.</p>
       </div>
-
-      <div class="trigger-example">
-        <h4>2. Abertura com Delay</h4>
-        <p>O widget abre após um tempo definido (padrão: 3 segundos).</p>
-        <code>trigger: 'delayed', autoOpenDelay: 5000</code>
-        <button onclick="initDelayedWidget()">Testar Abertura com Delay (5s)</button>
-      </div>
-
-      <div class="trigger-example">
-        <h4>3. Abertura por Scroll</h4>
-        <p>O widget abre quando o usuário rola 50% da página.</p>
-        <code>trigger: 'scroll', scrollThreshold: 50</code>
-        <button onclick="initScrollWidget()">Testar Abertura por Scroll</button>
-      </div>
-
-      <div class="trigger-example">
-        <h4>4. Abertura por Exit Intent</h4>
-        <p>O widget abre quando o mouse sai da janela (tentativa de sair).</p>
-        <code>trigger: 'exit-intent'</code>
-        <button onclick="initExitIntentWidget()">Testar Exit Intent</button>
-      </div>
-
-      <div class="trigger-example">
-        <h4>5. Abertura por Botão (Padrão)</h4>
-        <p>O widget abre apenas quando o usuário clica no botão flutuante.</p>
-        <code>trigger: 'button'</code>
-        <button onclick="initButtonWidget()">Testar Abertura por Botão</button>
-      </div>
-    </div>
-
-    <div class="config-section">
-      <h3>🔧 Controles</h3>
-      <button onclick="destroyAllWidgets()">Destruir Todos os Widgets</button>
-      <button onclick="location.reload()">Recarregar Página</button>
-    </div>
-
-    <div class="debug-info" id="debug-info">
-      <strong>Debug Info:</strong><br />
-      Widget não inicializado
-    </div>
-
-    <!-- Adiciona conteúdo para testar scroll -->
-    <div style="height: 2000px; background: linear-gradient(to bottom, #f0f0f0, #e0e0e0); padding: 20px; margin-top: 40px;">
-      <h3>📜 Área de Scroll para Teste</h3>
-      <p>Role para baixo para testar o trigger de scroll. O widget abrirá automaticamente quando você atingir 50% da página.</p>
-      <p>Este conteúdo é apenas para demonstrar a funcionalidade de scroll.</p>
     </div>
   </div>
 
-  <!-- Importa o bundle do widget -->
+  <!-- Scripts -->
   <script src="./dist/chat-widget.umd.cjs"></script>
   <script>
     let currentWidget = null;
+    let currentConfig = {};
 
-    function updateDebugInfo(message) {
-      document.getElementById('debug-info').innerHTML = `<strong>Debug Info:</strong><br />${message}`;
-    }
-
-    function initImmediateWidget() {
-      destroyAllWidgets();
-      currentWidget = ChatWidget.initWidget({
-        title: "Abertura Imediata",
-        position: "bottom-right",
-        primaryColor: "#10b981",
-        theme: "dark",
-        trigger: "immediate"
+    // Função para mostrar tabs
+    function showTab(tabName) {
+      // Esconde todos os tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
       });
-      updateDebugInfo("Widget configurado para abertura imediata");
-    }
-
-    function initDelayedWidget() {
-      destroyAllWidgets();
-      currentWidget = ChatWidget.initWidget({
-        title: "Abertura com Delay",
-        position: "bottom-right",
-        primaryColor: "#f59e0b",
-        theme: "dark",
-        trigger: "delayed",
-        autoOpenDelay: 5000
+      document.querySelectorAll('.config-tab').forEach(tab => {
+        tab.classList.remove('active');
       });
-      updateDebugInfo("Widget configurado para abertura em 5 segundos");
+
+      // Mostra o tab selecionado
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+
+      // Mostra/esconde campos específicos baseado no trigger
+      updateTriggerFields();
     }
 
-    function initScrollWidget() {
-      destroyAllWidgets();
-      currentWidget = ChatWidget.initWidget({
-        title: "Abertura por Scroll",
-        position: "bottom-right",
-        primaryColor: "#8b5cf6",
-        theme: "dark",
-        trigger: "scroll",
-        scrollThreshold: 50
-      });
-      updateDebugInfo("Widget configurado para abertura ao rolar 50% da página");
+    // Função para atualizar campos baseado no trigger
+    function updateTriggerFields() {
+      const trigger = document.querySelector('input[name="trigger"]:checked').value;
+      const delayGroup = document.getElementById('delayGroup');
+      const scrollGroup = document.getElementById('scrollGroup');
+
+      delayGroup.style.display = trigger === 'delayed' ? 'block' : 'none';
+      scrollGroup.style.display = trigger === 'scroll' ? 'block' : 'none';
     }
 
-    function initExitIntentWidget() {
-      destroyAllWidgets();
-      currentWidget = ChatWidget.initWidget({
-        title: "Exit Intent",
-        position: "bottom-right",
-        primaryColor: "#ef4444",
-        theme: "dark",
-        trigger: "exit-intent"
-      });
-      updateDebugInfo("Widget configurado para abertura por exit intent");
-    }
+    // Listener para mudanças no trigger
+    document.querySelectorAll('input[name="trigger"]').forEach(radio => {
+      radio.addEventListener('change', updateTriggerFields);
+    });
 
-    function initButtonWidget() {
-      destroyAllWidgets();
-      currentWidget = ChatWidget.initWidget({
-        title: "Abertura por Botão",
-        position: "bottom-right",
-        primaryColor: "#3b82f6",
-        theme: "dark",
-        trigger: "button"
-      });
-      updateDebugInfo("Widget configurado para abertura por botão");
-    }
+    // Função para aplicar configuração
+    function applyConfig() {
+      const config = {
+        title: document.getElementById('title').value,
+        position: document.getElementById('position').value,
+        width: parseInt(document.getElementById('width').value),
+        height: parseInt(document.getElementById('height').value),
+        theme: document.getElementById('theme').value,
+        primaryColor: document.getElementById('primaryColor').value,
+        endpoint: document.getElementById('endpoint').value || undefined,
+        autoOpen: document.getElementById('autoOpen').value === 'true',
+        trigger: document.querySelector('input[name="trigger"]:checked').value,
+        autoOpenDelay: parseInt(document.getElementById('autoOpenDelay').value),
+        scrollThreshold: parseInt(document.getElementById('scrollThreshold').value)
+      };
 
-    function destroyAllWidgets() {
-      if (typeof ChatWidget !== 'undefined') {
-        ChatWidget.destroyAllWidgets();
-        currentWidget = null;
-        updateDebugInfo("Todos os widgets foram destruídos");
+      // Destrói widget anterior se existir
+      if (currentWidget) {
+        destroyWidget();
+      }
+
+      // Inicializa novo widget
+      try {
+        currentWidget = ChatWidget.initWidget(config);
+        currentConfig = config;
+        
+        // Atualiza preview
+        document.getElementById('widgetPreview').classList.add('active');
+        document.getElementById('widgetPreview').innerHTML = `
+          <div class="preview-placeholder">
+            <svg fill="currentColor" viewBox="0 0 24 24" style="color: ${config.primaryColor}">
+              <path d="M12 2C17.523 2 22 6.477 22 12C22 17.523 17.523 22 12 22C10.298 22 8.685 21.575 7.26 20.82L2 22L3.18 16.74C2.425 15.315 2 13.702 2 12C2 6.477 6.477 2 12 2Z"/>
+              <circle cx="8" cy="12" r="1.5" fill="white" fill-opacity="0.9"/>
+              <circle cx="12" cy="12" r="1.5" fill="white" fill-opacity="0.9"/>
+              <circle cx="16" cy="12" r="1.5" fill="white" fill-opacity="0.9"/>
+            </svg>
+            <h3>${config.title}</h3>
+            <p>Widget configurado com sucesso!</p>
+            <p><strong>Trigger:</strong> ${config.trigger}</p>
+            <p><strong>Posição:</strong> ${config.position}</p>
+            <p><strong>Tema:</strong> ${config.theme}</p>
+          </div>
+        `;
+
+        // Atualiza status
+        updateStatus(`Widget configurado: ${config.title} (${config.trigger})`);
+        
+        // Mostra botão de destruir
+        document.getElementById('destroyBtn').style.display = 'block';
+        
+      } catch (error) {
+        updateStatus(`Erro ao configurar widget: ${error.message}`, 'error');
       }
     }
 
-    // Inicializa com abertura por botão por padrão
-    window.addEventListener('load', () => {
-      initButtonWidget();
+    // Função para resetar configuração
+    function resetConfig() {
+      document.getElementById('title').value = 'Fale conosco';
+      document.getElementById('position').value = 'bottom-right';
+      document.getElementById('width').value = '384';
+      document.getElementById('height').value = '600';
+      document.getElementById('theme').value = 'dark';
+      document.getElementById('primaryColor').value = '#667eea';
+      document.getElementById('endpoint').value = '';
+      document.getElementById('autoOpen').value = 'false';
+      document.querySelector('#trigger-button').checked = true;
+      document.getElementById('autoOpenDelay').value = '3000';
+      document.getElementById('scrollThreshold').value = '50';
+      
+      updateTriggerFields();
+      updateStatus('Configuração resetada para valores padrão');
+    }
+
+    // Função para destruir widget
+    function destroyWidget() {
+      if (currentWidget && typeof ChatWidget !== 'undefined') {
+        ChatWidget.destroyAllWidgets();
+        currentWidget = null;
+        currentConfig = {};
+        
+        // Reseta preview
+        document.getElementById('widgetPreview').classList.remove('active');
+        document.getElementById('widgetPreview').innerHTML = `
+          <div class="preview-placeholder">
+            <svg fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C17.523 2 22 6.477 22 12C22 17.523 17.523 22 12 22C10.298 22 8.685 21.575 7.26 20.82L2 22L3.18 16.74C2.425 15.315 2 13.702 2 12C2 6.477 6.477 2 12 2Z"/>
+              <circle cx="8" cy="12" r="1.5" fill="white" fill-opacity="0.9"/>
+              <circle cx="12" cy="12" r="1.5" fill="white" fill-opacity="0.9"/>
+              <circle cx="16" cy="12" r="1.5" fill="white" fill-opacity="0.9"/>
+            </svg>
+            <p>Configure o widget e clique em "Aplicar Configuração"</p>
+          </div>
+        `;
+        
+        // Esconde botão de destruir
+        document.getElementById('destroyBtn').style.display = 'none';
+        
+        updateStatus('Widget destruído');
+      }
+    }
+
+    // Função para atualizar status
+    function updateStatus(message, type = 'info') {
+      const statusText = document.getElementById('statusText');
+      const statusIcon = statusText.previousElementSibling;
+      
+      statusText.textContent = message;
+      
+      // Atualiza ícone baseado no tipo
+      statusIcon.className = `status-icon ${type}`;
+      if (type === 'error') {
+        statusIcon.textContent = '❌';
+      } else if (type === 'success') {
+        statusIcon.textContent = '✅';
+      } else {
+        statusIcon.textContent = 'ℹ️';
+      }
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function() {
+      updateTriggerFields();
+      updateStatus('Pronto para configurar o widget');
     });
   </script>
 </body>
