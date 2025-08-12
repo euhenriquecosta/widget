@@ -3,11 +3,13 @@ import { useState, useEffect } from 'preact/hooks';
 // Hook principal que gerencia o comportamento de abertura
 export const useWidgetTrigger = (config: {
   trigger: 'button' | 'immediate' | 'delayed' | 'scroll' | 'exit-intent';
-  autoOpenDelay?: number;
-  scrollThreshold?: number;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { trigger, autoOpenDelay = 3000, scrollThreshold = 50 } = config;
+  const { trigger } = config;
+
+  // Valores padrão fixos
+  const autoOpenDelay = 3000; // 3 segundos
+  const scrollThreshold = 50; // 50% da página
 
   useEffect(() => {
     // Abertura imediata - abre automaticamente
@@ -49,7 +51,7 @@ export const useWidgetTrigger = (config: {
 
     // trigger === 'button' - não abre automaticamente, aguarda clique
     // O botão sempre aparece, mas só abre quando clicado
-  }, [trigger, autoOpenDelay, scrollThreshold]);
+  }, [trigger]);
 
   return { isOpen, setIsOpen };
 };

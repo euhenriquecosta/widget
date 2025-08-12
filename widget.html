@@ -21,11 +21,17 @@
       ChatWidget.initWidget({
         title: 'LeadnatorX',
         position: 'bottom-right',
-        primaryColor: '#FFF',
         trigger: 'button',
-        theme: 'whatsapp',
-        width: 400,
-        height: 600,
+        colors: {
+          primary: '#000000',
+          secondary: '#ffffff',
+          foreground: '#ffffff',
+          border: '#000000'
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
       });
     } else {
       console.error('❌ ChatWidget não encontrado.');

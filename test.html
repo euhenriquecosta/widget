@@ -85,9 +85,17 @@
       currentWidget = ChatWidget.initWidget({
         title: "Abertura Imediata",
         position: "bottom-right",
-        primaryColor: "#10b981",
-        theme: "dark",
-        trigger: "immediate"
+        trigger: "immediate",
+        colors: {
+          primary: "#10b981",
+          secondary: "#f0fdf4",
+          foreground: "#ffffff",
+          border: "#059669"
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
       });
       updateStatus('🚀 Widget configurado para abertura imediata!');
     }
@@ -97,10 +105,17 @@
       currentWidget = ChatWidget.initWidget({
         title: "Abertura com Delay",
         position: "bottom-right",
-        primaryColor: "#f59e0b",
-        theme: "dark",
         trigger: "delayed",
-        autoOpenDelay: 3000
+        colors: {
+          primary: "#f59e0b",
+          secondary: "#fffbeb",
+          foreground: "#ffffff",
+          border: "#d97706"
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
       });
       updateStatus('⏰ Widget configurado para abertura em 3 segundos!');
     }
@@ -110,10 +125,17 @@
       currentWidget = ChatWidget.initWidget({
         title: "Abertura por Scroll",
         position: "bottom-right",
-        primaryColor: "#8b5cf6",
-        theme: "dark",
         trigger: "scroll",
-        scrollThreshold: 50
+        colors: {
+          primary: "#8b5cf6",
+          secondary: "#faf5ff",
+          foreground: "#ffffff",
+          border: "#7c3aed"
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
       });
       updateStatus('📜 Widget configurado para abertura ao rolar 50% da página!');
     }
@@ -123,9 +145,17 @@
       currentWidget = ChatWidget.initWidget({
         title: "Exit Intent",
         position: "bottom-right",
-        primaryColor: "#ef4444",
-        theme: "dark",
-        trigger: "exit-intent"
+        trigger: "exit-intent",
+        colors: {
+          primary: "#ef4444",
+          secondary: "#fef2f2",
+          foreground: "#ffffff",
+          border: "#dc2626"
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
       });
       updateStatus('🚪 Widget configurado para abertura por exit intent!');
     }
@@ -135,9 +165,17 @@
       currentWidget = ChatWidget.initWidget({
         title: "Abertura por Botão",
         position: "bottom-right",
-        primaryColor: "#3b82f6",
-        theme: "dark",
-        trigger: "button"
+        trigger: "button",
+        colors: {
+          primary: "#3b82f6",
+          secondary: "#eff6ff",
+          foreground: "#ffffff",
+          border: "#2563eb"
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
       });
       updateStatus('🔘 Widget configurado para abertura por botão!');
     }

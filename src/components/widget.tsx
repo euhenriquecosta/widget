@@ -1,115 +1,88 @@
-import { MessageCircle, X } from 'lucide-react';
-import type { WidgetConfig } from '../utils/types';
-import { useWidgetTrigger } from '../utils/hooks';
+import { X, MessageCircle } from 'lucide-react'
+import type { WidgetConfig } from '../utils/types'
+import { useWidgetTrigger } from '../utils/hooks'
 
 interface WidgetProps {
-  config: WidgetConfig;
+  config: WidgetConfig
 }
 
-export function Widget({ config }: WidgetProps) {
-  const position = config.position ?? 'bottom-right';
-  const theme = config.theme ?? 'dark';
-  const width = config.width ?? 384;
-  const height = config.height ?? 600;
-
-  const trigger = config.trigger ?? (config.autoOpen ? 'immediate' : 'button');
+export const Widget = ({ config }: WidgetProps) => {
   const { isOpen, setIsOpen } = useWidgetTrigger({
-    trigger,
-    autoOpenDelay: config.autoOpenDelay,
-    scrollThreshold: config.scrollThreshold
-  });
+    trigger: config.trigger
+  })
 
-  const flowId = '68963b901d3edd1d9dfb13cd';
-  const iframeUrl = `http://localhost:3000/widgets?theme=${theme}&flowId=${flowId}`;
+  const handleToggle = () => setIsOpen(!isOpen)
 
-  const positionClasses = {
-    'bottom-right': 'bottom-6 right-6',
-    'bottom-left': 'bottom-6 left-6',
-    'top-right': 'top-6 right-6',
-    'top-left': 'top-6 left-6',
-  };
+  // Estilos baseados nas cores configuradas
+  const buttonStyle = {
+    backgroundColor: config.colors.primary,
+    color: config.colors.foreground,
+  }
 
-  const themeClasses = {
-    dark: {
-      container: 'bg-gray-800 border-gray-700',
-      header: 'bg-gray-900 border-gray-600 text-indigo-100',
-      closeButton: 'text-gray-300 hover:bg-gray-700'
-    },
-    light: {
-      container: 'bg-gray-100 border-gray-300',
-      header: 'bg-gray-200 border-gray-300 text-gray-700',
-      closeButton: 'text-gray-600 hover:bg-gray-300'
-    },
-    whatsapp: {
-      container: 'bg-green-600 border-green-700',
-      header: 'bg-green-700 border-green-800 text-white',
-      closeButton: 'text-white hover:bg-green-600'
-    },
-    default: {
-      container: 'bg-gray-800 border-gray-700',
-      header: 'bg-gray-900 border-gray-600 text-indigo-100',
-      closeButton: 'text-gray-300 hover:bg-gray-700'
-    },
-    custom: {
-      container: 'bg-gray-800 border-gray-700',
-      header: 'bg-gray-900 border-gray-600 text-indigo-100',
-      closeButton: 'text-gray-300 hover:bg-gray-700'
-    }
-  };
+  const containerStyle = {
+    width: config.windowLayout.width,
+    height: config.windowLayout.height,
+    backgroundColor: config.colors.secondary,
+  }
 
-  const currentTheme = themeClasses[theme] || themeClasses.dark;
-
-  if (!isOpen) {
-    return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className={`fixed ${positionClasses[position]} bg-[${config.primaryColor}] flex items-center justify-center w-15 h-15 rounded-full transition-transform hover:scale-110 z-50 shadow-lg`}
-        aria-label="Abrir chat"
-      >
-        <MessageCircle size={32} fill='white' className='h-8 w-8 text-white' />
-      </button>
-    );
+  const headerStyle = {
+    backgroundColor: config.colors.primary,
+    color: config.colors.foreground
   }
 
   return (
-    <div
-      className={`fixed ${positionClasses[position]} flex flex-col z-50 rounded-xl overflow-hidden shadow-2xl`}
-      style={{
-        width: typeof width === 'number' ? `${width}px` : width,
-        height: typeof height === 'number' ? `${height}px` : height,
-      }}
-      role="dialog"
-      aria-modal="true"
-    >
-      <header
-        className={`flex items-center justify-between px-5 py-4 border-b min-h-14 ${currentTheme.header}`}
-      >
-        <div className="flex items-center gap-3">
-          <div
-            className="w-3 h-3 rounded-full"
-            style={{ background: config.primaryColor ?? '#2563eb' }}
-          />
-          <span className="font-semibold text-sm">{config.title}</span>
-        </div>
-
+    <>
+      {/* Botão flutuante - só aparece quando o widget está fechado */}
+      {!isOpen && (
         <button
-          onClick={() => setIsOpen(false)}
-          className={`p-2 rounded-lg transition-colors ${currentTheme.closeButton}`}
-          aria-label="Fechar"
+          onClick={handleToggle}
+          style={buttonStyle}
+          className={`fixed z-50 p-4 rounded-full shadow-lg hover:scale-110 transition-transform duration-200 ${config.position.includes('right') ? 'right-6' : 'left-6'
+            } ${config.position.includes('bottom') ? 'bottom-6' : 'top-6'
+            }`}
         >
-          <X size={16} />
+          <MessageCircle size={24} fill={config.colors.foreground} />
         </button>
-      </header>
+      )}
 
-      <main className="flex-1 overflow-hidden">
-        <iframe
-          src={iframeUrl}
-          title="Chat"
-          className="w-full h-full border-0 bg-transparent"
-          allow="microphone; camera"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-        />
-      </main>
-    </div>
-  );
+      {/* Widget principal */}
+      {isOpen && (
+        <div
+          style={containerStyle}
+          className={`fixed z-50 rounded-lg shadow-2xl overflow-hidden ${config.position.includes('right') ? 'right-6' : 'left-6'
+            } ${config.position.includes('bottom') ? 'bottom-6' : 'top-6'
+            }`}
+        >
+          {/* Header */}
+          <div
+            style={headerStyle}
+            className="flex items-center justify-between px-6 py-4"
+          >
+            <h3 className="text-lg font-semibold">{config.title}</h3>
+            <button
+              onClick={handleToggle}
+              className="p-2 rounded-lg transition-colors hover:bg-black/20"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          {/* Conteúdo do widget - iframe ocupa todo o espaço restante */}
+          <div className="flex-1" style={{ height: `calc(${config.windowLayout.height}px - 80px)` }}>
+            <iframe
+              src={`http://localhost:3000/widget?flowId=68963b901d3edd1d9dfb13cd`}
+              style={{
+                backgroundColor: 'transparent',
+                width: '100%',
+                height: '100%',
+                border: 'none'
+              }}
+              className="w-full h-full"
+              allow="camera; microphone; geolocation"
+            />
+          </div>
+        </div>
+      )}
+    </>
+  )
 }

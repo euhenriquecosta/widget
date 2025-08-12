@@ -1,68 +1,41 @@
-import { render } from 'preact';
-import { Widget } from './components/widget';
-import type { WidgetConfig } from './utils/types';
-import './index.css';
+import { render } from 'preact'
+import { Widget } from './components/widget'
+import type { WidgetConfig, WidgetColors, WindowLayout } from './utils/types'
 
-// Mapa para gerenciar múltiplos widgets
-const widgetInstances = new Map<string, HTMLDivElement>();
-
-export function initWidget(config: WidgetConfig = { title: 'Default Widget Title' }) {
-  const widgetId = config.id || 'default-widget';
-
-  // Remove widget existente se houver
-  const existingContainer = widgetInstances.get(widgetId);
-  if (existingContainer && document.body.contains(existingContainer)) {
-    document.body.removeChild(existingContainer);
+// Função para inicializar o widget
+export function initWidget(config: WidgetConfig) {
+  // Validação básica da configuração
+  if (!config.title || !config.position || !config.trigger || !config.colors || !config.windowLayout) {
+    throw new Error('Configuração inválida: todas as propriedades obrigatórias devem ser fornecidas')
   }
 
-  // Cria container para o widget
-  const widgetContainer = document.createElement('div');
-  widgetContainer.id = `chat-widget-${widgetId}`;
-  widgetContainer.className = 'chat-widget-container';
-  document.body.appendChild(widgetContainer);
-
-  // Armazena referência do container
-  widgetInstances.set(widgetId, widgetContainer);
+  // Cria um container para o widget
+  const container = document.createElement('div')
+  container.id = 'chat-widget-container'
+  document.body.appendChild(container)
 
   // Renderiza o widget
-  render(<Widget config={config} />, widgetContainer);
+  render(<Widget config={config} />, container)
 
-  // Retorna função para destruir o widget
   return {
     destroy: () => {
-      if (widgetContainer && document.body.contains(widgetContainer)) {
-        document.body.removeChild(widgetContainer);
-        widgetInstances.delete(widgetId);
+      if (container.parentNode) {
+        container.parentNode.removeChild(container)
       }
-    },
-    getConfig: () => config
-  };
-}
-
-// Função para destruir widget específico
-export function destroyWidget(widgetId: string = 'default-widget') {
-  const container = widgetInstances.get(widgetId);
-  if (container && document.body.contains(container)) {
-    document.body.removeChild(container);
-    widgetInstances.delete(widgetId);
+    }
   }
 }
 
 // Função para destruir todos os widgets
 export function destroyAllWidgets() {
-  widgetInstances.forEach((container) => {
-    if (document.body.contains(container)) {
-      document.body.removeChild(container);
+  const containers = document.querySelectorAll('#chat-widget-container')
+  containers.forEach(container => {
+    if (container.parentNode) {
+      container.parentNode.removeChild(container)
     }
-  });
-  widgetInstances.clear();
+  })
 }
 
-// Expõe as funções globalmente para uso via script tag
-if (typeof window !== 'undefined') {
-  (window as any).ChatWidget = {
-    initWidget,
-    destroyWidget,
-    destroyAllWidgets
-  };
-} 
+// Exporta o componente Widget para uso direto
+export { Widget }
+export type { WidgetConfig, WidgetColors, WindowLayout } 
