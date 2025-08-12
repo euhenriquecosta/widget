@@ -1,35 +1,99 @@
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useCallback } from 'preact/hooks';
+
+// Tipos para melhor type safety
+type TriggerType = 'button' | 'immediate' | 'delayed' | 'scroll' | 'exit-intent';
+
+interface TriggerConfig {
+  trigger: TriggerType;
+  autoOpenDelay?: number;
+  scrollThreshold?: number;
+}
+
+interface TriggerState {
+  isOpen: boolean;
+  hasAutoOpened: boolean;
+  wasManuallyClosed: boolean;
+}
 
 // Hook principal que gerencia o comportamento de abertura
-export const useWidgetTrigger = (config: {
-  trigger: 'button' | 'immediate' | 'delayed' | 'scroll' | 'exit-intent';
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { trigger } = config;
+export const useWidgetTrigger = (config: TriggerConfig) => {
+  const [state, setState] = useState<TriggerState>({
+    isOpen: false,
+    hasAutoOpened: false,
+    wasManuallyClosed: false
+  });
 
-  // Valores padrão fixos
-  const autoOpenDelay = 3000; // 3 segundos
-  const scrollThreshold = 50; // 50% da página
+  const { trigger, autoOpenDelay = 3000, scrollThreshold = 50 } = config;
 
-  useEffect(() => {
-    // Abertura imediata - abre automaticamente
+  // Função para atualizar estado de forma imutável
+  const updateState = useCallback((updates: Partial<TriggerState>) => {
+    setState(prev => ({ ...prev, ...updates }));
+  }, []);
+
+  // Função para abrir o widget
+  const openWidget = useCallback(() => {
+    updateState({ 
+      isOpen: true, 
+      wasManuallyClosed: false 
+    });
+  }, [updateState]);
+
+  // Função para fechar o widget
+  const closeWidget = useCallback(() => {
+    updateState({ 
+      isOpen: false, 
+      wasManuallyClosed: true 
+    });
+    
+    // Para trigger 'immediate', permite reabertura manual
     if (trigger === 'immediate') {
-      setIsOpen(true);
+      updateState({ hasAutoOpened: false });
+    }
+  }, [trigger, updateState]);
+
+  // Função para alternar o estado (apenas para triggers que permitem)
+  const toggleWidget = useCallback(() => {
+    if (trigger === 'button' || trigger === 'immediate') {
+      if (!state.isOpen) {
+        openWidget();
+      } else {
+        closeWidget();
+      }
+    }
+  }, [trigger, state.isOpen, openWidget, closeWidget]);
+
+  // Effect para gerenciar triggers automáticos
+  useEffect(() => {
+    // Se já foi aberto automaticamente ou fechado manualmente, não faz nada
+    if (state.hasAutoOpened || state.wasManuallyClosed) {
       return;
     }
 
-    // Abertura com delay - abre após tempo definido
+    // Abertura imediata
+    if (trigger === 'immediate') {
+      updateState({ isOpen: true, hasAutoOpened: true });
+      return;
+    }
+
+    // Abertura com delay
     if (trigger === 'delayed') {
-      const timer = setTimeout(() => setIsOpen(true), autoOpenDelay);
+      const timer = setTimeout(() => {
+        if (!state.hasAutoOpened && !state.wasManuallyClosed) {
+          updateState({ isOpen: true, hasAutoOpened: true });
+        }
+      }, autoOpenDelay);
+      
       return () => clearTimeout(timer);
     }
 
-    // Abertura por scroll - abre ao rolar % da página
+    // Abertura por scroll
     if (trigger === 'scroll') {
       const handleScroll = () => {
+        if (state.hasAutoOpened || state.wasManuallyClosed) return;
+        
         const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
         if (scrollPercent >= scrollThreshold) {
-          setIsOpen(true);
+          updateState({ isOpen: true, hasAutoOpened: true });
         }
       };
       
@@ -37,21 +101,24 @@ export const useWidgetTrigger = (config: {
       return () => window.removeEventListener('scroll', handleScroll);
     }
 
-    // Abertura por exit intent - abre quando mouse sai da janela
+    // Abertura por exit intent
     if (trigger === 'exit-intent') {
       const handleMouseLeave = (e: MouseEvent) => {
+        if (state.hasAutoOpened || state.wasManuallyClosed) return;
+        
         if (e.clientY <= 0) {
-          setIsOpen(true);
+          updateState({ isOpen: true, hasAutoOpened: true });
         }
       };
       
       document.addEventListener('mouseleave', handleMouseLeave);
       return () => document.removeEventListener('mouseleave', handleMouseLeave);
     }
+  }, [trigger, state.hasAutoOpened, state.wasManuallyClosed, updateState, autoOpenDelay, scrollThreshold]);
 
-    // trigger === 'button' - não abre automaticamente, aguarda clique
-    // O botão sempre aparece, mas só abre quando clicado
-  }, [trigger]);
-
-  return { isOpen, setIsOpen };
+  return {
+    isOpen: state.isOpen,
+    handleClose: closeWidget,
+    handleToggle: toggleWidget
+  };
 };

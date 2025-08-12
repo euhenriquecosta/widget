@@ -7,11 +7,9 @@ interface WidgetProps {
 }
 
 export const Widget = ({ config }: WidgetProps) => {
-  const { isOpen, setIsOpen } = useWidgetTrigger({
+  const { isOpen, handleClose, handleToggle } = useWidgetTrigger({
     trigger: config.trigger
   })
-
-  const handleToggle = () => setIsOpen(!isOpen)
 
   // Estilos baseados nas cores configuradas
   const buttonStyle = {
@@ -60,7 +58,7 @@ export const Widget = ({ config }: WidgetProps) => {
           >
             <h3 className="text-lg font-semibold">{config.title}</h3>
             <button
-              onClick={handleToggle}
+              onClick={handleClose}
               className="p-2 rounded-lg transition-colors hover:bg-black/20"
             >
               <X size={20} />
