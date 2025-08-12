@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "lucide-react": "^0.525.0",
-    "preact": "^10.19.6"
+    "preact": "^10.19.6"  
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.8.0",
@@ -25,7 +25,7 @@
     "typescript": "~5.8.3",
     "vite": "^4.5.14"
   },
-  "author": "Guilherme Alves & Euhenrique Costa",
+  "author": "Henrique Costa",
   "license": "MIT",
   "keywords": [
     "chat-widget",

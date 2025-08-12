@@ -1,30 +1,10 @@
-import { X } from 'lucide-react';
+import { MessageCircle, X } from 'lucide-react';
 import type { WidgetConfig } from '../utils/types';
 import { useWidgetTrigger } from '../utils/hooks';
 
 interface WidgetProps {
   config: WidgetConfig;
 }
-
-const ChatIcon = ({ size = 32 }: { size?: number }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M12 2C17.523 2 22 6.477 22 12C22 17.523 17.523 22 12 22C10.298 22 8.685 21.575 7.26 20.82L2 22L3.18 16.74C2.425 15.315 2 13.702 2 12C2 6.477 6.477 2 12 2Z"
-      fill="currentColor"
-      fillRule="evenodd"
-      clipRule="evenodd"
-    />
-    <circle cx="8" cy="12" r="1.5" fill="white" fillOpacity="0.9" />
-    <circle cx="12" cy="12" r="1.5" fill="white" fillOpacity="0.9" />
-    <circle cx="16" cy="12" r="1.5" fill="white" fillOpacity="0.9" />
-  </svg>
-);
 
 export function Widget({ config }: WidgetProps) {
   const position = config.position ?? 'bottom-right';
@@ -49,51 +29,60 @@ export function Widget({ config }: WidgetProps) {
     'top-left': 'top-6 left-6',
   };
 
-  const buttonStyle = {
-    width: '60px',
-    height: '60px',
-    background: config.primaryColor ?? '#374151',
-    color: '#fff',
-    border: 'none',
-    cursor: 'pointer',
-    borderRadius: '50%',
+  const themeClasses = {
+    dark: {
+      container: 'bg-gray-800 border-gray-700',
+      header: 'bg-gray-900 border-gray-600 text-indigo-100',
+      closeButton: 'text-gray-300 hover:bg-gray-700'
+    },
+    light: {
+      container: 'bg-gray-100 border-gray-300',
+      header: 'bg-gray-200 border-gray-300 text-gray-700',
+      closeButton: 'text-gray-600 hover:bg-gray-300'
+    },
+    whatsapp: {
+      container: 'bg-green-600 border-green-700',
+      header: 'bg-green-700 border-green-800 text-white',
+      closeButton: 'text-white hover:bg-green-600'
+    },
+    default: {
+      container: 'bg-gray-800 border-gray-700',
+      header: 'bg-gray-900 border-gray-600 text-indigo-100',
+      closeButton: 'text-gray-300 hover:bg-gray-700'
+    },
+    custom: {
+      container: 'bg-gray-800 border-gray-700',
+      header: 'bg-gray-900 border-gray-600 text-indigo-100',
+      closeButton: 'text-gray-300 hover:bg-gray-700'
+    }
   };
+
+  const currentTheme = themeClasses[theme] || themeClasses.dark;
 
   if (!isOpen) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed ${positionClasses[position]} flex items-center justify-center transition-transform hover:scale-110 z-50`}
-        style={buttonStyle}
+        className={`fixed ${positionClasses[position]} bg-[${config.primaryColor}] flex items-center justify-center w-15 h-15 rounded-full transition-transform hover:scale-110 z-50 shadow-lg`}
         aria-label="Abrir chat"
       >
-        <ChatIcon size={32} />
+        <MessageCircle size={32} fill='white' className='h-8 w-8 text-white' />
       </button>
     );
   }
 
   return (
     <div
-      className={`fixed ${positionClasses[position]} flex flex-col z-50`}
+      className={`fixed ${positionClasses[position]} flex flex-col z-50 rounded-xl overflow-hidden shadow-2xl`}
       style={{
         width: typeof width === 'number' ? `${width}px` : width,
         height: typeof height === 'number' ? `${height}px` : height,
-        borderRadius: 12,
-        overflow: 'hidden',
-        backgroundColor: theme === 'dark' ? '#1f2937' : '#f3f4f6',
-        border: theme === 'dark' ? '1px solid #374151' : '1px solid #d1d5db',
       }}
       role="dialog"
       aria-modal="true"
     >
       <header
-        className="flex items-center justify-between px-5"
-        style={{
-          background: theme === 'dark' ? '#111827' : '#e5e7eb',
-          borderBottom: theme === 'dark' ? '1px solid #4b5563' : '1px solid #d1d5db',
-          color: theme === 'dark' ? '#e0e7ff' : '#374151',
-          minHeight: 56,
-        }}
+        className={`flex items-center justify-between px-5 py-4 border-b min-h-14 ${currentTheme.header}`}
       >
         <div className="flex items-center gap-3">
           <div
@@ -105,13 +94,7 @@ export function Widget({ config }: WidgetProps) {
 
         <button
           onClick={() => setIsOpen(false)}
-          className="rounded !px-0 !mx-0 hover:bg-gray-700"
-          style={{
-            color: theme === 'dark' ? '#cbd5e1' : '#4b5563',
-            backgroundColor: 'transparent',
-            border: 'none',
-            cursor: 'pointer',
-          }}
+          className={`p-2 rounded-lg transition-colors ${currentTheme.closeButton}`}
           aria-label="Fechar"
         >
           <X size={16} />
@@ -122,8 +105,7 @@ export function Widget({ config }: WidgetProps) {
         <iframe
           src={iframeUrl}
           title="Chat"
-          className="w-full h-full border-0"
-          style={{ backgroundColor: 'transparent' }}
+          className="w-full h-full border-0 bg-transparent"
           allow="microphone; camera"
           sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
         />
