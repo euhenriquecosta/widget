@@ -2,6 +2,8 @@ import { render } from 'preact'
 import { Widget } from './components/widget'
 import type { WidgetConfig, WidgetColors, WindowLayout } from './utils/types'
 
+import './index.css'
+
 // Função para inicializar o widget
 export function initWidget(config: WidgetConfig) {
   // Validação básica da configuração
