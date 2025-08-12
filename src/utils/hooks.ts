@@ -44,22 +44,15 @@ export const useWidgetTrigger = (config: TriggerConfig) => {
       isOpen: false, 
       wasManuallyClosed: true 
     });
-    
-    // Para trigger 'immediate', permite reabertura manual
-    if (trigger === 'immediate') {
-      updateState({ hasAutoOpened: false });
-    }
-  }, [trigger, updateState]);
+  }, [updateState]);
 
-  // Função para alternar o estado (apenas para triggers que permitem)
+  // Função para alternar o estado (apenas para trigger 'button')
   const toggleWidget = useCallback(() => {
-    if (trigger === 'button' || trigger === 'immediate') {
       if (!state.isOpen) {
         openWidget();
       } else {
         closeWidget();
       }
-    }
   }, [trigger, state.isOpen, openWidget, closeWidget]);
 
   // Effect para gerenciar triggers automáticos
