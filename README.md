@@ -46,7 +46,7 @@ Isso gerará os arquivos na pasta `dist/`:
 ```html
 <script src="https://meusite.com/chat-widget.umd.cjs"></script>
 <script>
-  ChatWidget.initWidget({
+  Leadnator.initWidget({
     id: "meu-widget",
     title: "Fale conosco",
     position: "bottom-right",
@@ -91,13 +91,13 @@ interface WidgetConfig {
 
 ```javascript
 // Widget básico
-ChatWidget.initWidget({
+Leadnator.initWidget({
   title: "Fale conosco",
   position: "bottom-right"
 });
 
 // Widget personalizado
-ChatWidget.initWidget({
+Leadnator.initWidget({
   id: "suporte",
   title: "Suporte Técnico",
   position: "bottom-left",
@@ -109,7 +109,7 @@ ChatWidget.initWidget({
 });
 
 // Widget com auto-open
-ChatWidget.initWidget({
+Leadnator.initWidget({
   id: "marketing",
   title: "Fale conosco",
   position: "bottom-right",
@@ -123,13 +123,13 @@ ChatWidget.initWidget({
 
 ```javascript
 // Destruir widget específico
-ChatWidget.destroyWidget("meu-widget");
+Leadnator.destroyWidget("meu-widget");
 
 // Destruir todos os widgets
-ChatWidget.destroyAllWidgets();
+Leadnator.destroyAllWidgets();
 
 // Obter referência do widget
-const widget = ChatWidget.initWidget({ id: "meu-widget" });
+const widget = Leadnator.initWidget({ id: "meu-widget" });
 widget.destroy(); // Destruir este widget específico
 widget.getConfig(); // Obter configuração atual
 ```

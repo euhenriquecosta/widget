@@ -72,8 +72,8 @@
     }
     
     function destroyWidget() {
-      if (typeof ChatWidget !== 'undefined') {
-        ChatWidget.destroyAllWidgets();
+      if (typeof Leadnator !== 'undefined') {
+        Leadnator.destroyAllWidgets();
         currentWidget = null;
         updateStatus('✅ Widget destruído com sucesso!');
       }
@@ -81,7 +81,7 @@
     
     function testImmediate() {
       destroyWidget();
-      currentWidget = ChatWidget.initWidget({
+      currentWidget = Leadnator.initWidget({
         title: "Abertura Imediata",
         position: "bottom-right",
         trigger: "immediate",
@@ -121,7 +121,7 @@
     
     function testDelayed() {
       destroyWidget();
-      currentWidget = ChatWidget.initWidget({
+      currentWidget = Leadnator.initWidget({
         title: "Abertura com Delay",
         position: "bottom-right",
         trigger: "delayed",
@@ -143,7 +143,7 @@
     
     function testScroll() {
       destroyWidget();
-      currentWidget = ChatWidget.initWidget({
+      currentWidget = Leadnator.initWidget({
         title: "Abertura por Scroll",
         position: "bottom-right",
         trigger: "scroll",
@@ -165,7 +165,7 @@
     
     function testExitIntent() {
       destroyWidget();
-      currentWidget = ChatWidget.initWidget({
+      currentWidget = Leadnator.initWidget({
         title: "Exit Intent",
         position: "bottom-right",
         trigger: "exit-intent",
@@ -187,7 +187,7 @@
     
     function testButton() {
       destroyWidget();
-      currentWidget = ChatWidget.initWidget({
+      currentWidget = Leadnator.initWidget({
         title: "Abertura por Botão",
         position: "bottom-right",
         trigger: "button",

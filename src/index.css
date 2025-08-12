@@ -19,6 +19,10 @@
   -webkit-text-size-adjust: 100%;
 }
 
+button {
+  @apply cursor-pointer
+}
+
 /* Removendo efeitos de foco/seleção */
 button:focus,
 button:focus-visible {

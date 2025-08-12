@@ -624,7 +624,7 @@
 
       // Inicializa novo widget
       try {
-        currentWidget = ChatWidget.initWidget(config);
+        currentWidget = Leadnator.initWidget(config);
         currentConfig = config;
         
         // Atualiza preview
@@ -676,8 +676,8 @@
 
     // Função para destruir widget
     function destroyWidget() {
-      if (currentWidget && typeof ChatWidget !== 'undefined') {
-        ChatWidget.destroyAllWidgets();
+      if (currentWidget && typeof Leadnator !== 'undefined') {
+        Leadnator.destroyAllWidgets();
         currentWidget = null;
         currentConfig = {};
         

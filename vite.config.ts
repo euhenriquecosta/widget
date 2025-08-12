@@ -12,7 +12,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/index.tsx',
-      name: 'ChatWidget',
+      name: 'Leadnator',
       fileName: 'chat-widget',
       formats: ['umd', 'iife']
     }
