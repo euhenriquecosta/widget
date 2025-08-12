@@ -16,25 +16,41 @@
 <body>
   <script src="./dist/chat-widget.umd.cjs"></script>
   <script>
-    if (typeof ChatWidget !== 'undefined') {
       ChatWidget.initWidget({
         title: 'LeadnatorX',
         position: 'bottom-right',
-        trigger: 'button',
+        trigger: 'delayed',
         colors: {
-          primary: '#000000',
-          secondary: '#ffffff',
-          foreground: '#ffffff',
-          border: '#000000'
+          header: {
+            background: '#000000',
+            foreground: '#FFFFFF'
+          },
+          icon: {
+            background: '#000000',
+            foreground: '#FFFFFF'
+          },
+          chat: {
+            background: '#F2F2F2',
+            messageUser: {
+              background: '#000000',
+              foreground: '#FFFFFF'
+            },
+            messageBot: {
+              background: '#FFFFFF',
+              foreground: '#000000'
+            }
+          },
+          other: {
+            border: '#d3d3d3',
+            inputText: '#000000',
+            inputPlaceholder: '#6C757D'
+          }
         },
         windowLayout: {
           width: 400,
           height: 600
         }
       });
-    } else {
-      console.error('❌ ChatWidget não encontrado.');
-    }
   </script>
 </body>
 </html>

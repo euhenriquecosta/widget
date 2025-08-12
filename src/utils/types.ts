@@ -1,9 +1,36 @@
 // Configurações de cores do widget
 export interface WidgetColors {
-  primary: string;
-  secondary: string;
-  foreground: string;
-  border: string;
+  // Cores do header do widget
+  header?: {
+    background?: string;
+    foreground?: string;
+  };
+  
+  // Cores do ícone flutuante
+  icon?: {
+    background?: string;
+    foreground?: string;
+  };
+  
+  // Cores do chat interno
+  chat?: {
+    background?: string;
+    messageUser?: {
+      background?: string;
+      foreground?: string;
+    };
+    messageBot?: {
+      background?: string;
+      foreground?: string;
+    };
+  };
+  
+  // Outras cores
+  other?: {
+    border?: string;
+    inputText?: string;
+    inputPlaceholder?: string;
+  };
 }
 
 // Configurações de layout da janela

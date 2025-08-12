@@ -6,7 +6,7 @@
   "type": "module",
   "private": false,
   "scripts": {
-    "dev": "pnpm build:widget && npx open-cli example.html",
+    "dev": "pnpm build:widget && npx open-cli widget.html",
     "build": "tsc -b && vite build",
     "build:widget": "vite build",
     "preview": "vite preview"
@@ -18,7 +18,6 @@
   "devDependencies": {
     "@preact/preset-vite": "^2.8.0",
     "@tailwindcss/postcss": "^4.1.11",
-    "autoprefixer": "^10.4.21",
     "open-cli": "^8.0.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
