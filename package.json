@@ -1,15 +1,19 @@
 {
-  "name": "chat-widget",
+  "name": "@euhenriquecosta/leadnator-widget",
   "version": "1.0.0",
   "description": "A customizable chat widget built with Preact",
-  "main": "dist/chat-widget.umd.js",
+  "main": "dist/chat-widget.iife.js",
   "type": "module",
   "private": false,
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "dev": "pnpm build:widget && npx open-cli widget.html",
     "build": "tsc -b && vite build",
     "build:widget": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepublishOnly": "pnpm build:widget"
   },
   "dependencies": {
     "lucide-react": "^0.525.0",
@@ -21,6 +25,7 @@
     "open-cli": "^8.0.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
+    "terser": "^5.43.1",
     "typescript": "~5.8.3",
     "vite": "^4.5.14",
     "vite-plugin-css-injected-by-js": "^3.5.2"

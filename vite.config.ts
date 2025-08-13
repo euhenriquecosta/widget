@@ -14,7 +14,9 @@ export default defineConfig({
       entry: 'src/index.tsx',
       name: 'Leadnator',
       fileName: 'chat-widget',
-      formats: ['umd', 'iife']
-    }
+      formats: ['iife']
+    },
+    minify: 'terser',
+    sourcemap: true
   }
 })
