@@ -14,23 +14,21 @@ Um widget de formulário estilo chat desenvolvido com Preact, TypeScript, Tailwi
 
 ## Instalação
 
-### Via npm (GitHub Packages)
+### Via npm (npmjs.org - Público)
 
 ```bash
-# Configurar o registry do GitHub Packages
-npm config set @euhenriquecosta:registry https://npm.pkg.github.com
-
-# Instalar o widget
-npm install @euhenriquecosta/leadnator-widget
+# Instalar o widget (público)
+npm install leadnator-widget
 
 # Ou usando pnpm
-pnpm add @euhenriquecosta/leadnator-widget
+pnpm add leadnator-widget
 ```
 
-### Via CDN (após publicação)
+### Via CDN (GitHub Pages - 100% Público)
 
 ```html
-<script src="https://npm.pkg.github.com/@euhenriquecosta/leadnator-widget/dist/chat-widget.iife.js"></script>
+<!-- CDN público via GitHub Pages -->
+<script src="https://euhenriquecosta.github.io/widget/chat-widget.iife.js"></script>
 ```
 
 ### Uso após instalação
@@ -44,8 +42,8 @@ pnpm add @euhenriquecosta/leadnator-widget
 <body>
     <!-- Conteúdo do seu site -->
     
-    <!-- Widget Leadnator -->
-    <script src="https://npm.pkg.github.com/@euhenriquecosta/leadnator-widget/dist/chat-widget.iife.js"></script>
+    <!-- Widget Leadnator via CDN público -->
+    <script src="https://euhenriquecosta.github.io/widget/chat-widget.iife.js"></script>
     <script>
         // Inicializar o widget
         Leadnator.initWidget({

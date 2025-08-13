@@ -1,13 +1,10 @@
 {
-  "name": "@euhenriquecosta/leadnator-widget",
+  "name": "leadnator-widget",
   "version": "1.0.0",
   "description": "A customizable chat widget built with Preact",
   "main": "dist/chat-widget.iife.js",
   "type": "module",
   "private": false,
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "scripts": {
     "dev": "pnpm build:widget && npx open-cli widget.html",
     "build": "tsc -b && vite build",
