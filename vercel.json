@@ -1,6 +1,0 @@
-{
-  "buildCommand": "pnpm build:widget",
-  "outputDirectory": "dist",
-  "framework": null,
-  "installCommand": "pnpm install"
-}
