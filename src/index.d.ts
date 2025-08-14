@@ -39,6 +39,6 @@ declare module 'leadnator-widget' {
     destroyAllWidgets(): void;
   }
 
-  const Leadnator: Leadnator;
+  export const Leadnator: Leadnator;
   export default Leadnator;
 }

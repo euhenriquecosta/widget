@@ -24,7 +24,19 @@ export function initWidget(config: WidgetConfig) {
       if (container.parentNode) {
         container.parentNode.removeChild(container)
       }
+    },
+    getConfig: () => config,
+    updateConfig: (newConfig: Partial<WidgetConfig>) => {
+      Object.assign(config, newConfig)
     }
+  }
+}
+
+// Função para destruir widget específico
+export function destroyWidget(id: string) {
+  const container = document.querySelector(`#${id}`)
+  if (container && container.parentNode) {
+    container.parentNode.removeChild(container)
   }
 }
 
@@ -37,6 +49,16 @@ export function destroyAllWidgets() {
     }
   })
 }
+
+// Objeto principal Leadnator
+export const Leadnator = {
+  initWidget,
+  destroyWidget,
+  destroyAllWidgets
+}
+
+// Export default para compatibilidade
+export default Leadnator
 
 // Exporta o componente Widget para uso direto
 export { Widget }
