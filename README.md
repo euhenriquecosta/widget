@@ -34,6 +34,7 @@ pnpm add leadnator-widget
 ### Uso com TypeScript
 
 ```typescript
+// Importação padrão (recomendado)
 import { Leadnator, WidgetConfig } from 'leadnator-widget';
 
 const config: WidgetConfig = {
@@ -59,6 +60,18 @@ const currentConfig = widget.getConfig();
 
 // Destruir widget
 widget.destroy();
+```
+
+### Uso com Vite/Webpack (Bundlers modernos)
+
+```typescript
+// Para bundlers modernos, use a importação padrão
+import Leadnator from 'leadnator-widget';
+
+const widget = Leadnator.initWidget({
+  title: "Fale conosco",
+  position: "bottom-right"
+});
 ```
 
 ### Uso após instalação
