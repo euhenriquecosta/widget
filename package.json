@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A customizable chat widget built with Preact",
   "main": "dist/chat-widget.iife.js",
+  "types": "src/index.d.ts",
   "type": "module",
   "private": false,
   "scripts": {

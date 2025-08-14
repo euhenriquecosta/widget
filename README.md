@@ -31,6 +31,36 @@ pnpm add leadnator-widget
 <script src="https://cdn.jsdelivr.net/npm/leadnator-widget@1.0.0/dist/chat-widget.iife.js"></script>
 ```
 
+### Uso com TypeScript
+
+```typescript
+import { Leadnator, WidgetConfig } from 'leadnator-widget';
+
+const config: WidgetConfig = {
+  id: "meu-widget",
+  title: "Fale conosco",
+  position: "bottom-right",
+  primaryColor: "#3B82F6",
+  theme: "light",
+  autoOpen: false,
+  showAvatar: true,
+  showTimestamp: true,
+  welcomeMessage: "Olá! Como posso ajudá-lo?",
+  successMessage: "Obrigado! Entraremos em contato em breve."
+};
+
+const widget = Leadnator.initWidget(config);
+
+// Atualizar configuração
+widget.updateConfig({ theme: "dark" });
+
+// Obter configuração atual
+const currentConfig = widget.getConfig();
+
+// Destruir widget
+widget.destroy();
+```
+
 ### Uso após instalação
 
 ```html
