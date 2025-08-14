@@ -1,6 +1,6 @@
 {
   "name": "leadnator-widget",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A customizable chat widget built with Preact",
   "main": "src/module.ts",
   "browser": "dist/chat-widget.iife.js",
