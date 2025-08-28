@@ -13,7 +13,7 @@ export const Widget = ({ config }: WidgetProps) => {
 
   // Função helper para construir a URL do iframe
   const buildIframeUrl = () => {
-    const baseUrl = 'http://localhost:3000/widget?flowId=68963b901d3edd1d9dfb13cd';
+    const baseUrl = config.baseURL || 'http://localhost:3000/widget?flowId=68963b901d3edd1d9dfb13cd';
     const params = new URLSearchParams();
 
     // Cores do ícone

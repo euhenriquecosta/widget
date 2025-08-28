@@ -46,4 +46,5 @@ export interface WidgetConfig {
   trigger: 'button' | 'immediate' | 'delayed' | 'scroll' | 'exit-intent';
   colors: WidgetColors;
   windowLayout: WindowLayout;
+  baseURL?: string; // URL base para o iframe do widget
 }
