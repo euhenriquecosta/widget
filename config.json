@@ -2,6 +2,7 @@
   "title": "LeadnatorX",
   "position": "bottom-right",
   "trigger": "button",
+  "baseURL": "http://localhost:3000/widget?flowId=68963b901d3edd1d9dfb13cd",
   "colors": {
     "primary": "#000000",
     "secondary": "#000000",

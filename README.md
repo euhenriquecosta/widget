@@ -124,6 +124,9 @@ interface WidgetConfig {
   welcomeMessage?: string;        // Mensagem de boas-vindas personalizada
   successMessage?: string;        // Mensagem de sucesso personalizada
   
+  // URL e Integração
+  baseURL?: string;               // URL base para o iframe do widget (ex: "https://api.exemplo.com/widget?flowId=123")
+  
   // Integração (futuro)
   apiEndpoint?: string;          // Endpoint da API
   apiKey?: string;               // Chave da API
@@ -163,6 +166,15 @@ Leadnator.initWidget({
   primaryColor: "#8B5CF6",
   autoOpen: true,
   showTimestamp: true
+});
+
+// Widget com URL personalizada
+Leadnator.initWidget({
+  id: "produção",
+  title: "Fale conosco",
+  position: "bottom-right",
+  baseURL: "https://api.meusite.com/widget?flowId=12345",
+  primaryColor: "#3B82F6"
 });
 ```
 
