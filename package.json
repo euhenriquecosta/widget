@@ -1,6 +1,6 @@
 {
   "name": "@euhenriquecosta/leadnator-widget",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A customizable chat widget built with Preact",
   "main": "src/entry.ts",
   "module": "src/entry.ts",
