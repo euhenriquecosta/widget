@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Teste FlowId Dinâmico - Widget</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .header h1 {
+      color: #2d3748;
+      margin-bottom: 10px;
+    }
+    
+    .test-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #f8fafc;
+      border-radius: 15px;
+      border-left: 4px solid #667eea;
+    }
+    
+    .test-section h3 {
+      color: #2d3748;
+      margin-bottom: 15px;
+    }
+    
+    .url-example {
+      background: #1a202c;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      margin: 10px 0;
+      word-break: break-all;
+    }
+    
+    .btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+      background: #5a67d8;
+      transform: translateY(-2px);
+    }
+    
+    .btn-danger {
+      background: #e53e3e;
+    }
+    
+    .btn-danger:hover {
+      background: #c53030;
+    }
+    
+    .status {
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      font-weight: 500;
+    }
+    
+    .status.success {
+      background: #c6f6d5;
+      color: #22543d;
+      border: 1px solid #9ae6b4;
+    }
+    
+    .status.info {
+      background: #bee3f8;
+      color: #2a4365;
+      border: 1px solid #90cdf4;
+    }
+    
+    .status.warning {
+      background: #faf089;
+      color: #744210;
+      border: 1px solid #f6e05e;
+    }
+    
+    .flowid-display {
+      background: #1a202c;
+      color: #68d391;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🧪 Teste FlowId Dinâmico</h1>
+      <p>Teste a extração automática do flowId da URL do navegador</p>
+    </div>
+
+    <div class="test-section">
+      <h3>📋 URL Atual</h3>
+      <div class="url-example" id="currentUrl">Carregando...</div>
+      <div class="flowid-display" id="extractedFlowId">Extraindo flowId...</div>
+    </div>
+
+    <div class="test-section">
+      <h3>🎯 Teste do Widget</h3>
+      <p>O widget será inicializado automaticamente com o flowId extraído da URL atual.</p>
+      
+      <div class="status info" id="widgetStatus">
+        Aguardando inicialização do widget...
+      </div>
+      
+      <button class="btn" onclick="initWidget()">🚀 Inicializar Widget</button>
+      <button class="btn btn-danger" onclick="destroyWidget()">🗑️ Destruir Widget</button>
+    </div>
+
+    <div class="test-section">
+      <h3>🔗 URLs de Teste</h3>
+      <p>Teste com diferentes URLs para verificar a extração do flowId:</p>
+      
+      <div class="url-example">
+        https://leadnator.com.br/flows/68b4a0d9e64414a59012ca4c
+      </div>
+      <div class="url-example">
+        https://leadnator.com.br/flows/68b4a0d9e64414a59012ca4c/
+      </div>
+      <div class="url-example">
+        https://leadnator.com.br/flows/68b4a0d9e64414a59012ca4c?param=value
+      </div>
+      <div class="url-example">
+        https://leadnator.com.br/flows/68b4a0d9e64414a59012ca4c#section
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h3>⚙️ Configuração Atual</h3>
+      <div id="configDisplay" class="url-example">
+        Carregando configuração...
+      </div>
+    </div>
+  </div>
+
+  <!-- Script do Widget -->
+  <script src="./dist/chat-widget.iife.js"></script>
+  
+  <script>
+    let currentWidget = null;
+    
+    // Função para extrair flowId da URL (simulando a função do widget)
+    function extractFlowIdFromUrl() {
+      try {
+        const currentUrl = window.location.href;
+        const flowIdPattern = /\/flows\/([a-f0-9]{24})/i;
+        const match = currentUrl.match(flowIdPattern);
+        
+        if (match && match[1]) {
+          return match[1];
+        }
+        
+        return null;
+      } catch (error) {
+        console.warn('Erro ao extrair flowId da URL:', error);
+        return null;
+      }
+    }
+    
+    // Função para construir URL base do widget
+    function buildWidgetBaseUrl(customBaseUrl, customFlowId) {
+      if (customBaseUrl) {
+        return customBaseUrl;
+      }
+      
+      const flowId = customFlowId || extractFlowIdFromUrl();
+      
+      if (flowId) {
+        return `https://leadnator.com.br/widget?flowId=${flowId}`;
+      }
+      
+      return 'http://localhost:3000/widget?flowId=68963b901d3edd1d9dfb13cd';
+    }
+    
+    // Função para inicializar o widget
+    function initWidget() {
+      const flowId = extractFlowIdFromUrl();
+      
+      if (!flowId) {
+        updateStatus('❌ Não foi possível extrair flowId da URL atual', 'warning');
+        return;
+      }
+      
+      const config = {
+        title: 'Teste FlowId Dinâmico',
+        position: 'bottom-right',
+        trigger: 'button',
+        colors: {
+          header: {
+            background: '#667eea',
+            foreground: '#FFFFFF'
+          },
+          icon: {
+            background: '#667eea',
+            foreground: '#FFFFFF'
+          },
+          chat: {
+            background: '#F2F2F2',
+            messageUser: {
+              background: '#667eea',
+              foreground: '#fff'
+            },
+            messageBot: {
+              background: '#FFFFFF',
+              foreground: '#000000'
+            }
+          },
+          other: {
+            border: '#d3d3d3',
+            inputText: '#000000',
+            inputPlaceholder: '#6C757D'
+          }
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        },
+        flowId: flowId // Passa o flowId extraído
+      };
+      
+      try {
+        // Destrói widget anterior se existir
+        if (currentWidget) {
+          destroyWidget();
+        }
+        
+        currentWidget = Leadnator.initWidget(config);
+        updateStatus(`✅ Widget inicializado com flowId: ${flowId}`, 'success');
+        updateConfigDisplay(config);
+        
+      } catch (error) {
+        updateStatus(`❌ Erro ao inicializar widget: ${error.message}`, 'warning');
+      }
+    }
+    
+    // Função para destruir o widget
+    function destroyWidget() {
+      if (currentWidget && typeof Leadnator !== 'undefined') {
+        Leadnator.destroyAllWidgets();
+        currentWidget = null;
+        updateStatus('🗑️ Widget destruído', 'info');
+      }
+    }
+    
+    // Função para atualizar status
+    function updateStatus(message, type = 'info') {
+      const statusElement = document.getElementById('widgetStatus');
+      statusElement.textContent = message;
+      statusElement.className = `status ${type}`;
+    }
+    
+    // Função para atualizar display da configuração
+    function updateConfigDisplay(config) {
+      const configElement = document.getElementById('configDisplay');
+      configElement.textContent = JSON.stringify(config, null, 2);
+    }
+    
+    // Inicialização da página
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mostra URL atual
+      document.getElementById('currentUrl').textContent = window.location.href;
+      
+      // Extrai e mostra flowId
+      const flowId = extractFlowIdFromUrl();
+      const flowIdElement = document.getElementById('extractedFlowId');
+      
+      if (flowId) {
+        flowIdElement.textContent = `FlowId extraído: ${flowId}`;
+        flowIdElement.style.color = '#68d391';
+        updateStatus('✅ FlowId extraído com sucesso da URL', 'success');
+      } else {
+        flowIdElement.textContent = '❌ Nenhum flowId encontrado na URL';
+        flowIdElement.style.color = '#fc8181';
+        updateStatus('⚠️ Nenhum flowId encontrado na URL atual', 'warning');
+      }
+      
+      // Inicializa widget automaticamente se flowId foi encontrado
+      if (flowId) {
+        setTimeout(() => {
+          initWidget();
+        }, 1000);
+      }
+    });
+  </script>
+</body>
+</html>

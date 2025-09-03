@@ -47,4 +47,5 @@ export interface WidgetConfig {
   colors: WidgetColors;
   windowLayout: WindowLayout;
   baseURL?: string; // URL base para o iframe do widget
+  flowId?: string; // FlowId específico (opcional - se não fornecido, tenta extrair da URL atual)
 }

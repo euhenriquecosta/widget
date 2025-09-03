@@ -166,7 +166,8 @@ interface WidgetConfig {
   successMessage?: string;        // Mensagem de sucesso personalizada
   
   // URL e Integração
-  baseURL?: string;               // URL base para o iframe do widget (ex: "https://api.exemplo.com/widget?flowId=123")
+  baseURL?: string;               // URL base para o iframe do widget (ex: "https://api.exemplo.com/widget")
+  flowId?: string;                // FlowId específico (opcional - se não fornecido, tenta extrair da URL atual)
   
   // Integração (futuro)
   apiEndpoint?: string;          // Endpoint da API
@@ -181,7 +182,7 @@ interface WidgetConfig {
 ### Exemplos de uso
 
 ```javascript
-// Widget básico
+// Widget básico (extrai flowId automaticamente da URL)
 Leadnator.initWidget({
   title: "Fale conosco",
   position: "bottom-right"
@@ -209,13 +210,50 @@ Leadnator.initWidget({
   showTimestamp: true
 });
 
-// Widget com URL personalizada
+// Widget com flowId específico
 Leadnator.initWidget({
   id: "produção",
   title: "Fale conosco",
   position: "bottom-right",
-  baseURL: "https://api.meusite.com/widget?flowId=12345",
+  flowId: "68b4a0d9e64414a59012ca4c",
   primaryColor: "#3B82F6"
+});
+
+// Widget com URL personalizada
+Leadnator.initWidget({
+  id: "custom",
+  title: "Fale conosco",
+  position: "bottom-right",
+  baseURL: "https://api.meusite.com/widget",
+  flowId: "12345",
+  primaryColor: "#3B82F6"
+});
+```
+
+### 🔄 Extração Automática do FlowId
+
+O widget agora **extrai automaticamente** o `flowId` da URL atual do navegador quando não é fornecido explicitamente.
+
+**URLs suportadas:**
+- `https://leadnator.com.br/flows/68b4a0d9e64414a59012ca4c`
+- `https://leadnator.com.br/flows/68b4a0d9e64414a59012ca4c/`
+- `https://leadnator.com.br/flows/68b4a0d9e64414a59012ca4c?param=value`
+- `https://leadnator.com.br/flows/68b4a0d9e64414a59012ca4c#section`
+
+**Como funciona:**
+1. Se `flowId` for fornecido na configuração → usa o fornecido
+2. Se `flowId` não for fornecido → extrai da URL atual
+3. Se não conseguir extrair → usa fallback para localhost (desenvolvimento)
+
+**Exemplo prático:**
+```javascript
+// Na página: https://leadnator.com.br/flows/68b4a0d9e64414a59012ca4c
+// O widget automaticamente usará o flowId: 68b4a0d9e64414a59012ca4c
+
+Leadnator.initWidget({
+  title: "Fale conosco",
+  position: "bottom-right"
+  // flowId será extraído automaticamente da URL!
 });
 ```
 

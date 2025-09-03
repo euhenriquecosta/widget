@@ -1,6 +1,7 @@
 import { X, MessageCircle } from 'lucide-react'
 import type { WidgetConfig } from '../utils/types'
 import { useWidgetTrigger } from '../utils/hooks'
+import { buildWidgetBaseUrl } from '../utils/url-helper'
 
 interface WidgetProps {
   config: WidgetConfig
@@ -13,7 +14,8 @@ export const Widget = ({ config }: WidgetProps) => {
 
   // Função helper para construir a URL do iframe
   const buildIframeUrl = () => {
-    const baseUrl = config.baseURL || 'http://localhost:3000/widget?flowId=68963b901d3edd1d9dfb13cd';
+    // Usa a nova função que extrai flowId dinamicamente da URL
+    const baseUrl = buildWidgetBaseUrl(config.baseURL, config.flowId);
     const params = new URLSearchParams();
 
     // Cores do ícone

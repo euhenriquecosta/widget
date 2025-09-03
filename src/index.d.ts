@@ -18,6 +18,10 @@ declare module 'leadnator-widget' {
     welcomeMessage?: string;
     successMessage?: string;
     
+    // URL e Integração
+    baseURL?: string;               // URL base para o iframe do widget
+    flowId?: string;                // FlowId específico (opcional - se não fornecido, tenta extrair da URL atual)
+    
     // Integração (futuro)
     apiEndpoint?: string;
     apiKey?: string;
