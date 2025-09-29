@@ -3,8 +3,11 @@ registro nome, email e senha
 E login email e senha 
 
 A seguir o tutorial de uso
-
 Passo 1
+Para baixar a bilbioteca
+npm i guardiya
+
+Passo 2
 Para configurar o prisma com o nextjs 15
 npx guardiya prisma 
 
