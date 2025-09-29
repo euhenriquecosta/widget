@@ -319,6 +319,21 @@ export default async function DashboardLayout({
 
 
 `);
+    //app/api/me/route.ts
+    createFile(join(process.cwd(), "app/api/me/route.ts"), `
+import { prisma } from "@/lib/prisma";
+import { meHandlerAppRouter } from "guardiya/server";
+export async function GET(req: Request) {
+  // Passamos a função para buscar o usuário pelo ID
+  return meHandlerAppRouter(req, async (id) =>
+    prisma.user.findUnique({
+      where: { id:id as string},
+      select: { id: true, email:true, role: true, name: true, passwordHash: true },
+    })
+  );
+}
+
+`);
     //app/api/register/route.ts
     createFile(join(process.cwd(), "app/api/register/route.ts"), `
     import { prisma } from "../../../lib/prisma";
