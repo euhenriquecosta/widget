@@ -1,0 +1,43 @@
+{
+  "name": "guardiya",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "./client": "./dist/client/index.js",
+    "./server": "./dist/server/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "files": [
+    "dist",
+    "flags"
+  ],
+  "bin": {
+    "guardiya": "dist/cli.js"
+  },
+  "version": "1.3.29",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "argon2": "^0.44.0",
+    "commander": "^14.0.1",
+    "cookie": "^1.0.2",
+    "is-unicode-supported": "^2.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "swr": "^2.3.6",
+    "terminal-image": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.6.0",
+    "@types/node": "^24.5.2",
+    "@types/react": "^19.1.15",
+    "typescript": "^5.9.2"
+  }
+}
