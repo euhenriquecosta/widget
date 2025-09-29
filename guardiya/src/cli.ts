@@ -501,7 +501,7 @@ model User {
 
 function setupPostgresDockerCompose() {
   createFile(
-    join(process.cwd(), "docker-compose.yml"), `version: "3.9"
+    join(process.cwd(), "docker-compose.yml"), `
 
 services:
   postgres:
@@ -539,7 +539,7 @@ function setupPrisma() {
 program
   .name("guardiya")
   .description("CLI do Guardiya - autenticação e utilidades para Next.js")
-  .version("1.3.28");
+  .version("1.3.31");
 program
   .command("postgres-docker-compose")
   .description("Instala e inicializa Postgres no docker compose..")
