@@ -17,9 +17,9 @@
   "bin": {
     "guardiya": "dist/cli.js"
   },
-  "version": "1.3.31",
+  "version": "1.3.33",
   "keywords": [],
-  "author": "",
+  "author": "Giovane Vanderson Cunha Dias",
   "license": "ISC",
   "description": "",
   "dependencies": {

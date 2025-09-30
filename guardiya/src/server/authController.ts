@@ -58,6 +58,8 @@ export function createAuth(userProvider: UserProvider) {
       return { cookie, user: safeUser };
     },
 
+  
+
     // logout retorna cookie pronto para setar
     logout: async (): Promise<{ cookie: string; message: string }> => {
       const cookie = clearSessionCookie();
