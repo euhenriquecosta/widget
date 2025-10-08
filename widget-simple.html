@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Teste Widget - Forma Simplificada</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f5f5f5;
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+    .info {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-top: 0;
+    }
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+    pre {
+      background: #282c34;
+      color: #abb2bf;
+      padding: 20px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="info">
+    <h1>✨ Widget Leadnator - Forma Simplificada</h1>
+    <p>
+      Agora você só precisa passar o <code>flowId</code> e os endpoints da API são construídos automaticamente!
+    </p>
+    
+    <h2>Código usado nesta página:</h2>
+    <pre>
+Leadnator.initWidget({
+  flowId: '68b4a0cde64414a59012ca37'
+});
+    </pre>
+    
+    <h2>O que acontece automaticamente:</h2>
+    <ul>
+      <li><strong>configEndpoint:</strong> <code>https://api.leadnator.com.br/api/v1/flows/public/68b4a0cde64414a59012ca37/widget-design</code></li>
+      <li><strong>domainEndpoint:</strong> <code>https://api.leadnator.com.br/api/v1/flows/domains/68b4a0cde64414a59012ca37</code></li>
+    </ul>
+    
+    <h2>Você ainda pode customizar:</h2>
+    <pre>
+Leadnator.initWidget({
+  flowId: '68b4a0cde64414a59012ca37',
+  title: 'Meu Chat Personalizado', // Sobrescreve config do servidor
+  position: 'bottom-left'            // Sobrescreve config do servidor
+});
+    </pre>
+  </div>
+
+  <!-- Leadnator Widget -->
+  <script src="https://cdn.jsdelivr.net/npm/leadnator-widget@1.2.2/dist/chat-widget.iife.js"></script>
+  <script>
+    Leadnator.initWidget({
+      flowId: '68b4a0cde64414a59012ca37'
+    });
+  </script>
+</body>
+</html>
+

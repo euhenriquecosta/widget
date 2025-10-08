@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste - Opções de Acionamento do Widget</title>
+</head>
+<body class="font-sans m-0 p-5 bg-gradient-to-br from-blue-500 to-purple-600 min-h-screen text-gray-800">
+  <div class="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-2xl">
+    <h1 class="text-center text-gray-800 mb-8 text-4xl font-bold">🚀 Opções de Acionamento do Widget</h1>
+    
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 text-center text-green-800" id="status">
+      Widget não inicializado. Escolha uma opção de acionamento abaixo.
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div class="bg-gray-50 border-2 border-gray-200 rounded-xl p-6 transition-all duration-300 hover:border-blue-400 hover:-translate-y-1 hover:shadow-lg">
+        <h3 class="text-gray-800 mb-3 text-xl font-semibold">🎯 Abertura Imediata</h3>
+        <p class="text-gray-600 mb-5 leading-relaxed">O widget abre automaticamente assim que a página carrega.</p>
+        <code class="bg-gray-200 px-2 py-1 rounded-md font-mono text-sm text-gray-800 block mb-4">trigger: 'immediate'</code>
+        <button class="w-full bg-blue-500 text-white border-none py-3 px-6 rounded-lg cursor-pointer text-base font-medium transition-all duration-200 hover:bg-blue-600 hover:-translate-y-0.5" onclick="testImmediate()">Testar Abertura Imediata</button>
+      </div>
+      
+      <div class="bg-gray-50 border-2 border-gray-200 rounded-xl p-6 transition-all duration-300 hover:border-blue-400 hover:-translate-y-1 hover:shadow-lg">
+        <h3 class="text-gray-800 mb-3 text-xl font-semibold">⏰ Abertura com Delay</h3>
+        <p class="text-gray-600 mb-5 leading-relaxed">O widget abre após 3 segundos de carregamento da página.</p>
+        <code class="bg-gray-200 px-2 py-1 rounded-md font-mono text-sm text-gray-800 block mb-4">trigger: 'delayed', autoOpenDelay: 3000</code>
+        <button class="w-full bg-blue-500 text-white border-none py-3 px-6 rounded-lg cursor-pointer text-base font-medium transition-all duration-200 hover:bg-blue-600 hover:-translate-y-0.5" onclick="testDelayed()">Testar Abertura com Delay</button>
+      </div>
+      
+      <div class="bg-gray-50 border-2 border-gray-200 rounded-xl p-6 transition-all duration-300 hover:border-blue-400 hover:-translate-y-1 hover:shadow-lg">
+        <h3 class="text-gray-800 mb-3 text-xl font-semibold">📜 Abertura por Scroll</h3>
+        <p class="text-gray-600 mb-5 leading-relaxed">O widget abre quando você rola 50% da página.</p>
+        <code class="bg-gray-200 px-2 py-1 rounded-md font-mono text-sm text-gray-800 block mb-4">trigger: 'scroll', scrollThreshold: 50</code>
+        <button class="w-full bg-blue-500 text-white border-none py-3 px-6 rounded-lg cursor-pointer text-base font-medium transition-all duration-200 hover:bg-blue-600 hover:-translate-y-0.5" onclick="testScroll()">Testar Abertura por Scroll</button>
+      </div>
+      
+      <div class="bg-gray-50 border-2 border-gray-200 rounded-xl p-6 transition-all duration-300 hover:border-blue-400 hover:-translate-y-1 hover:shadow-lg">
+        <h3 class="text-gray-800 mb-3 text-xl font-semibold">🚪 Exit Intent</h3>
+        <p class="text-gray-600 mb-5 leading-relaxed">O widget abre quando o mouse sai da janela (tentativa de sair).</p>
+        <code class="bg-gray-200 px-2 py-1 rounded-md font-mono text-sm text-gray-800 block mb-4">trigger: 'exit-intent'</code>
+        <button class="w-full bg-blue-500 text-white border-none py-3 px-6 rounded-lg cursor-pointer text-base font-medium transition-all duration-200 hover:bg-blue-600 hover:-translate-y-0.5" onclick="testExitIntent()">Testar Exit Intent</button>
+      </div>
+      
+      <div class="bg-gray-50 border-2 border-gray-200 rounded-xl p-6 transition-all duration-300 hover:border-blue-400 hover:-translate-y-1 hover:shadow-lg">
+        <h3 class="text-gray-800 mb-3 text-xl font-semibold">🔘 Abertura por Botão</h3>
+        <p class="text-gray-600 mb-5 leading-relaxed">O widget abre apenas quando você clica no botão flutuante.</p>
+        <code class="bg-gray-200 px-2 py-1 rounded-md font-mono text-sm text-gray-800 block mb-4">trigger: 'button'</code>
+        <button class="w-full bg-blue-500 text-white border-none py-3 px-6 rounded-lg cursor-pointer text-base font-medium transition-all duration-200 hover:bg-blue-600 hover:-translate-y-0.5" onclick="testButton()">Testar Abertura por Botão</button>
+      </div>
+    </div>
+    
+    <div class="text-center my-8 p-5 bg-gray-100 rounded-xl">
+      <button class="bg-red-500 text-white border-none py-3 px-6 rounded-lg cursor-pointer text-base mx-2 transition-all duration-200 hover:bg-red-600" onclick="destroyWidget()">🗑️ Destruir Widget</button>
+      <button class="bg-gray-500 text-white border-none py-3 px-6 rounded-lg cursor-pointer text-base mx-2 transition-all duration-200 hover:bg-gray-600" onclick="location.reload()">🔄 Recarregar Página</button>
+    </div>
+    
+    <div class="h-96 bg-gradient-to-b from-gray-50 to-gray-100 my-8 p-10 rounded-xl text-center">
+      <h3 class="text-gray-800 mb-5 text-2xl">📜 Área de Scroll para Teste</h3>
+      <p class="text-gray-600 mb-3">Role para baixo para testar o trigger de scroll.</p>
+      <p class="text-gray-600 mb-3">O widget abrirá automaticamente quando você atingir 50% da página.</p>
+      <p class="text-gray-600">Este conteúdo é apenas para demonstrar a funcionalidade.</p>
+    </div>
+  </div>
+
+  <script src="./dist/chat-widget.umd.cjs"></script>
+  <script>
+    let currentWidget = null;
+    
+    function updateStatus(message) {
+      document.getElementById('status').innerHTML = message;
+    }
+    
+    function destroyWidget() {
+      if (typeof Leadnator !== 'undefined') {
+        Leadnator.destroyAllWidgets();
+        currentWidget = null;
+        updateStatus('✅ Widget destruído com sucesso!');
+      }
+    }
+    
+    function testImmediate() {
+      destroyWidget();
+      currentWidget = Leadnator.initWidget({
+        title: "Abertura Imediata",
+        position: "bottom-right",
+        trigger: "immediate",
+        colors: {
+          header: {
+            background: "#10b981",
+            foreground: "#ffffff"
+          },
+          icon: {
+            background: "#10b981",
+            foreground: "#ffffff"
+          },
+          chat: {
+            background: "#f0fdf4",
+            messageUser: {
+              background: "#10b981",
+              foreground: "#ffffff"
+            },
+            messageBot: {
+              background: "#ffffff",
+              foreground: "#1f2937"
+            }
+          },
+          other: {
+            border: "#059669",
+            inputText: "#1f2937",
+            inputPlaceholder: "#6b7280"
+          }
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
+      });
+      updateStatus('🚀 Widget configurado para abertura imediata!');
+    }
+    
+    function testDelayed() {
+      destroyWidget();
+      currentWidget = Leadnator.initWidget({
+        title: "Abertura com Delay",
+        position: "bottom-right",
+        trigger: "delayed",
+        colors: {
+          primary: "#f59e0b",
+          secondary: "#fffbeb",
+          foreground: "#ffffff",
+          border: "#d97706",
+          inputText: "#92400e",
+          background: "#fef3c7"
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
+      });
+      updateStatus('⏰ Widget configurado para abertura em 3 segundos!');
+    }
+    
+    function testScroll() {
+      destroyWidget();
+      currentWidget = Leadnator.initWidget({
+        title: "Abertura por Scroll",
+        position: "bottom-right",
+        trigger: "scroll",
+        colors: {
+          primary: "#8b5cf6",
+          secondary: "#faf5ff",
+          foreground: "#ffffff",
+          border: "#7c3aed",
+          inputText: "#581c87",
+          background: "#f3e8ff"
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
+      });
+      updateStatus('📜 Widget configurado para abertura ao rolar 50% da página!');
+    }
+    
+    function testExitIntent() {
+      destroyWidget();
+      currentWidget = Leadnator.initWidget({
+        title: "Exit Intent",
+        position: "bottom-right",
+        trigger: "exit-intent",
+        colors: {
+          primary: "#ef4444",
+          secondary: "#fef2f2",
+          foreground: "#ffffff",
+          border: "#dc2626",
+          inputText: "#991b1b",
+          background: "#fee2e2"
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
+      });
+      updateStatus('🚪 Widget configurado para abertura por exit intent!');
+    }
+    
+    function testButton() {
+      destroyWidget();
+      currentWidget = Leadnator.initWidget({
+        title: "Abertura por Botão",
+        position: "bottom-right",
+        trigger: "button",
+        colors: {
+          primary: "#3b82f6",
+          secondary: "#eff6ff",
+          foreground: "#ffffff",
+          border: "#2563eb",
+          inputText: "#1e40af",
+          background: "#dbeafe"
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
+      });
+      updateStatus('🔘 Widget configurado para abertura por botão!');
+    }
+    
+    // Inicializa com abertura por botão por padrão
+    window.addEventListener('load', () => {
+      testButton();
+    });
+  </script>
+</body>
+</html>

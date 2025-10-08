@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Teste Widget</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/leadnator-widget@1.0.0/dist/chat-widget.iife.js"></script>
+  <script>
+      Leadnator.initWidget({
+        title: 'Henrique',
+        position: 'bottom-right',
+        trigger: 'delayed',
+        colors: {
+          header: {
+            background: '#ffbb00',
+            foreground: '#FFFFFF'
+          },
+          icon: {
+            background: '#005eff',
+            foreground: '#FFFFFF'
+          },
+          chat: {
+            background: '#F2F2F2',
+            messageUser: {
+              background: '#005eff',
+              foreground: '#fff'
+            },
+            messageBot: {
+              background: '#FFFFFF',
+              foreground: '#000000'
+            }
+          },
+          other: {
+            border: '#d3d3d3',
+            inputText: '#000000',
+            inputPlaceholder: '#6C757D'
+          }
+        },
+        windowLayout: {
+          width: 400,
+          height: 600
+        }
+      });
+  </script>
+</body>
+</html>

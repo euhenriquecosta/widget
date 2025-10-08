@@ -1,0 +1,16 @@
+{
+  "title": "LeadnatorX",
+  "position": "bottom-right",
+  "trigger": "button",
+  "baseURL": "https://leadnator.com.br/widget",
+  "colors": {
+    "primary": "#000000",
+    "secondary": "#000000",
+    "foreground": "#FFFFFF",
+    "border": "#000000"
+  },
+  "windowLayout": {
+    "width": 400,
+    "height": 600
+  }
+}
