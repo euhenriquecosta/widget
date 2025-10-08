@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Widget com Configurações do Servidor</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f5f5f5;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .info {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #2196f3;
+    }
+    .code {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="info">
+    <h2>🚀 Widget com Configurações do Servidor</h2>
+    <p>Este exemplo demonstra como o widget agora busca configurações automaticamente do servidor:</p>
+    <ul>
+      <li>✅ <strong>Extrai o flowId</strong> da URL atual automaticamente</li>
+      <li>✅ <strong>Busca configurações</strong> da API do servidor</li>
+      <li>✅ <strong>Mescla configurações</strong> (servidor + local)</li>
+      <li>✅ <strong>Fallback inteligente</strong> se a API não estiver disponível</li>
+    </ul>
+  </div>
+
+  <div class="code">
+    <strong>URL atual:</strong> <span id="current-url"></span><br>
+    <strong>FlowId extraído:</strong> <span id="extracted-flowid"></span><br>
+    <strong>API URL:</strong> <span id="api-url"></span>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/leadnator-widget@1.1.4/dist/chat-widget.iife.js"></script>
+  <script>
+    // Mostra informações da URL atual
+    document.getElementById('current-url').textContent = window.location.href;
+    
+    // Extrai flowId da URL
+    const flowIdPattern = /\/flows\/([a-f0-9]{24})/i;
+    const match = window.location.href.match(flowIdPattern);
+    const flowId = match ? match[1] : '68b4a0d9e64414a59012ca4c'; // Fallback para teste
+    
+    document.getElementById('extracted-flowid').textContent = flowId;
+    document.getElementById('api-url').textContent = `https://api.leadnator.com.br/api/v1/flows/public/${flowId}/widget-design`;
+
+    // Inicializa o widget com configurações mínimas
+    // O widget vai buscar o resto das configurações do servidor automaticamente
+    Leadnator.initWidget({
+      // Configurações locais (opcionais - serão mescladas com as do servidor)
+      title: 'Chat Personalizado', // Esta configuração local terá prioridade
+      flowId: flowId,
+      configEndpoint: `https://api.leadnator.com.br/api/v1/flows/public/${flowId}/widget-design`
+      // As outras configurações (cores, posição, etc.) virão do servidor
+    }).then(widget => {
+      console.log('Widget inicializado com sucesso!');
+      console.log('Configuração final:', widget.getConfig());
+    }).catch(error => {
+      console.error('Erro ao inicializar widget:', error);
+    });
+  </script>
+</body>
+</html>

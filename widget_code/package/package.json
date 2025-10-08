@@ -1,0 +1,63 @@
+{
+  "name": "leadnator-widget",
+  "version": "1.2.6",
+  "description": "A customizable chat widget built with Preact with configEndpoint support for server configuration loading",
+  "main": "src/entry.ts",
+  "module": "src/entry.ts",
+  "browser": "dist/chat-widget.iife.js",
+  "types": "src/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/entry.ts",
+      "require": "./dist/chat-widget.iife.js",
+      "default": "./src/entry.ts"
+    }
+  },
+  "private": false,
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "dev": "pnpm build:widget && npx open-cli widget.html",
+    "build": "tsc -b && vite build",
+    "build:widget": "vite build",
+    "preview": "vite preview",
+    "prepublishOnly": "pnpm build:widget"
+  },
+  "dependencies": {
+    "lucide-react": "^0.525.0",
+    "preact": "^10.19.6"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.8.0",
+    "@tailwindcss/postcss": "^4.1.11",
+    "open-cli": "^8.0.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
+    "terser": "^5.43.1",
+    "typescript": "~5.8.3",
+    "vite": "^4.5.14",
+    "vite-plugin-css-injected-by-js": "^3.5.2"
+  },
+  "author": "Henrique Costa",
+  "license": "MIT",
+  "keywords": [
+    "chat-widget",
+    "preact",
+    "widget",
+    "customizable",
+    "UI",
+    "server-config",
+    "api-integration",
+    "leadnator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/euhenriquecosta/widget"
+  },
+  "bugs": {
+    "url": "https://github.com/euhenriquecosta/widget/issues"
+  },
+  "homepage": "https://github.com/euhenriquecosta/widget#readme"
+}
