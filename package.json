@@ -1,6 +1,6 @@
 {
   "name": "leadnator-widget",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "A customizable chat widget built with Preact with configEndpoint support for server configuration loading",
   "main": "src/entry.ts",
   "module": "src/entry.ts",
