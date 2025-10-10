@@ -1,7 +1,7 @@
 import { X, MessageCircle } from 'lucide-react'
 import type { WidgetConfig } from '../utils/types'
 import { useWidgetTrigger } from '../utils/hooks'
-import { buildWidgetBaseUrl } from '../utils/url-helper'
+import { buildWidgetBaseUrl, extractTrackingParams } from '../utils/url-helper'
 
 interface WidgetProps {
   config: WidgetConfig
@@ -16,6 +16,7 @@ export const Widget = ({ config }: WidgetProps) => {
     const baseUrl = buildWidgetBaseUrl(config.baseURL, config.flowId);
     const params = new URLSearchParams();
 
+    // Adiciona parâmetros de cores
     if (config.colors.icon?.background) params.append('iconBackground', config.colors.icon.background);
     if (config.colors.icon?.foreground) params.append('iconForeground', config.colors.icon.foreground);
 
@@ -31,6 +32,12 @@ export const Widget = ({ config }: WidgetProps) => {
     if (config.colors.other?.border) params.append('border', config.colors.other.border);
     if (config.colors.other?.inputText) params.append('inputText', config.colors.other.inputText);
     if (config.colors.other?.inputPlaceholder) params.append('inputPlaceholder', config.colors.other.inputPlaceholder);
+
+    // Extrai e adiciona parâmetros de rastreamento da URL global
+    const trackingParams = extractTrackingParams();
+    Object.entries(trackingParams).forEach(([key, value]) => {
+      params.append(key, value);
+    });
 
     return `${baseUrl}&${params.toString()}`;
   };
