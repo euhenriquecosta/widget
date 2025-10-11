@@ -127,3 +127,38 @@ export function isValidFlowId(flowId: string): boolean {
   // FlowId deve ter exatamente 24 caracteres hexadecimais
   return /^[a-f0-9]{24}$/i.test(flowId);
 }
+
+/**
+ * Extrai parâmetros de rastreamento da URL global
+ * Inclui: gclid, fbclid, utm_term, utm_medium, utm_source, utm_campaign
+ */
+export function extractTrackingParams(): Record<string, string> {
+  const trackingParams: Record<string, string> = {};
+  
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Lista de parâmetros de rastreamento para extrair
+    const trackingKeys = [
+      'gclid',      // Google Click ID
+      'fbclid',     // Facebook Click ID
+      'utm_term',
+      'utm_medium',
+      'utm_source',
+      'utm_campaign'
+    ];
+    
+    // Extrai apenas os parâmetros que existem na URL
+    trackingKeys.forEach(key => {
+      const value = urlParams.get(key);
+      if (value) {
+        trackingParams[key] = value;
+      }
+    });
+    
+    return trackingParams;
+  } catch (error) {
+    console.warn('Erro ao extrair parâmetros de rastreamento:', error);
+    return {};
+  }
+}
